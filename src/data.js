@@ -13,7 +13,10 @@ const data = {
     { text: 'DashBoard', icon: <Assessment/>, link: '/dashboard' },
     { text: 'Form Page', icon: <Web/>, link: '/form' },
     { text: 'Table Page', icon: <GridOn/>, link: '/table' },
-    { text: 'Login Page', icon: <PermIdentity/>, link: '/login' }
+    { text: 'Login Page', icon: <PermIdentity/>, link: '/login' },
+    { text: 'Stream Video', icon: <Web/>, link: '/stream' },
+    //{ text: 'Stream Video Form', icon: <Web/>, link: '/streamVideoForm' },
+    { text: 'Group Mngt', icon: <Web/>, link: '/groupMngt' },
   ],
   tablePage: {
     items: [
@@ -27,6 +30,37 @@ const data = {
       {id: 8, name: 'Product 8', price: '$750.00', category: 'Category 8'}
     ]
   },
+  streamVideoPage: {
+    items: [
+      {id: '1988198441503862', url: 'https://www.facebook.com/80Mpage/videos/1988198441503862/', credit: '$50.00', share: 10,botShare : 7, live : true, status : 1},
+      {id: '1988198441503863', url: 'https://www.facebook.com/80Mpage/videos/1988198441503862/', credit: '$50.00', share: 10, botShare : 6,live : false, status : 2},
+    ]
+  },
+  groupShare : {
+    items : [
+      {
+          "message": "nodejs http post fb nguyễn văn vũ video attach - ssss",
+          "story": "Van On Ho shared a live video to the group: dev fb.",
+          "created_time": "2017-11-16T11:36:32+0000",
+          "id": "141275386523052_141122219871702"
+      },
+      {
+          "message": "nodejs http post fb nguyễn văn vũ video attach",
+          "story": "Van On Ho shared a live video to the group: dev fb.",
+          "created_time": "2017-11-16T10:54:36+0000",
+          "id": "141275386523052_141111059872818"
+      }
+    ]
+    
+  },
+  
+  groupPage: {
+    items: [
+      {id: 1547184938658515, name: 'dev fb', url: 'https://www.facebook.com/groups/1547184938658515/', botsInGroup: 50, botShares : 25},
+      {id: 1547184938658516, name: 'dev fb', url: 'https://www.facebook.com/groups/1547184938658515/', botsInGroup: 100, botShares : 25},
+    ]
+  },
+  
   dashBoardPage: {
     recentProducts: [
       {id: 1, title: 'Samsung TV', text: 'Samsung 32 1080p 60Hz LED Smart HDTV.'},

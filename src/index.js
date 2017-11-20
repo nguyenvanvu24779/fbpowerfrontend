@@ -9,9 +9,14 @@ require('./favicon.ico');
 import './styles.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'flexboxgrid/css/flexboxgrid.css';
+import configureStore from './store/configureStore'
+import rootSaga from './sagas'
+
+const store = configureStore(window.__INITIAL_STATE__)
+store.runSaga(rootSaga);
 
 injectTapEventPlugin();
 
 render(
-    <Router routes={routes} history={browserHistory} />, document.getElementById('app')
+    <Router routes={routes} store={store} history={browserHistory} />, document.getElementById('app')
 );
