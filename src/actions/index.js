@@ -10,11 +10,13 @@ function createRequestTypes(base) {
 	}, {})
 }
 
+export const GROUPS = createRequestTypes('GROUPS')
 export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
 export const STARRED = createRequestTypes('STARRED')
 export const STARGAZERS = createRequestTypes('STARGAZERS')
 
+export const ADD_GROUPS = 'ADD_GROUPS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
 export const NAVIGATE =  'NAVIGATE'
 export const LOAD_USER_PAGE = 'LOAD_USER_PAGE'
@@ -52,6 +54,7 @@ export const stargazers = {
   failure: (fullName, error) => action(STARGAZERS[FAILURE], {fullName, error}),
 }
 
+export const addGroup = data => action(ADD_GROUPS,{data} ) 
 export const updateRouterState = state => action(UPDATE_ROUTER_STATE, {state})
 export const navigate = pathname => action(NAVIGATE, {pathname})
 export const loadUserPage = (login, requiredFields = []) => action(LOAD_USER_PAGE, {login, requiredFields})

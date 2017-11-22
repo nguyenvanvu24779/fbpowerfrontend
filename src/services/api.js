@@ -17,7 +17,7 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1)
 }
 
-const API_ROOT = 'https://api.github.com/'
+const API_ROOT = 'http://facebook-nguyenvanvu.c9users.io:8080/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -57,6 +57,14 @@ function callApi(endpoint, schema) {
 
 
 // api services
+export const fetchAddGroup = (typeAdd, ids) => {
+  if(typeAdd == 1){
+    callApi(`groups/addGroupsByVideoId?videoIds=${ids.join('|')}`, {})
+  } else {
+    callApi(`groups/addMulti?groupIds=${ids.join('|')}`, {})
+  }
+  
+} 
 export const fetchUser = login => callApi(`users/${login}`, {})
 export const fetchRepo = fullName => callApi(`repos/${fullName}`, {})
 export const fetchStarred = url => callApi(url, {})

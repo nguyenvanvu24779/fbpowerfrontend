@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {PropTypes} from 'react';
 import {Link} from 'react-router';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -13,9 +13,10 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import { connect } from 'react-redux'
+import { addGroup} from '../actions'
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -77,7 +78,8 @@ class GroupManagementPage extends React.Component  {
         this.state = {
           open: false,
           openAddGroup : false,
-          typeAdd : 0, // 0 - group id, 1 - video id
+          typeAdd : 0, // 0 - group id, 1 - video id,
+          ids : []
         };
     }
   
@@ -108,6 +110,18 @@ class GroupManagementPage extends React.Component  {
     handleCloseAddGroup = () => {
         this.setState({openAddGroup: false});
     };
+    
+    handleAddGroup = () => {
+      if(this.state.ids.length > 0 ){
+        this.props.addGroup({typeAdd:  this.state.typeAdd , ids : this.state.ids})
+        this.setState({openAddGroup: false});
+      }
+    };
+    handleOnChangeIds = (event) =>{
+      this.setState({
+        ids: event.target.value.split("|"),
+      });
+    }
   
 
     render(){
@@ -116,7 +130,7 @@ class GroupManagementPage extends React.Component  {
               label="Ok"
               primary={true}
               keyboardFocused={true}
-              onClick={this.handleCloseAddGroup}
+              onClick={this.handleAddGroup.bind(this)}
             />
         ];  
     return (
@@ -135,6 +149,7 @@ class GroupManagementPage extends React.Component  {
                   hintText={this.state.typeAdd == 0 ? "GroupID1|GroupID2|GroupID3..." : "VideoID1|VideoID2|VideoID3..."}
                   floatingLabelText={this.state.typeAdd == 0 ? "Group ID" : "Video ID"}
                   fullWidth={true}
+                  onChange={this.handleOnChangeIds}
                 />
             </Dialog>
             <Popover
@@ -202,4 +217,11 @@ class GroupManagementPage extends React.Component  {
     }
 };
 
-export default GroupManagementPage;
+GroupManagementPage.propTypes = {
+  addGroup: PropTypes.func.isRequired
+}
+
+export default connect(
+  state => ({}),
+  { addGroup }
+)(GroupManagementPage)

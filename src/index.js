@@ -11,6 +11,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'flexboxgrid/css/flexboxgrid.css';
 import configureStore from './store/configureStore'
 import rootSaga from './sagas'
+import { Provider } from 'react-redux'
 
 const store = configureStore(window.__INITIAL_STATE__)
 store.runSaga(rootSaga);
@@ -18,5 +19,7 @@ store.runSaga(rootSaga);
 injectTapEventPlugin();
 
 render(
-    <Router routes={routes} store={store} history={browserHistory} />, document.getElementById('app')
+    <Provider store={store}>
+        <Router routes={routes}  history={browserHistory} />
+    </Provider>, document.getElementById('app')
 );
