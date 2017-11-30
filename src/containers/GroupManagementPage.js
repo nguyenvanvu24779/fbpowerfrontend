@@ -174,7 +174,7 @@ class GroupManagementPage extends React.Component  {
                   <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.name}>Name</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.url}>URL</TableHeaderColumn>
-                  <TableHeaderColumn style={styles.columns.botInGroup}>Bots in Group</TableHeaderColumn>
+                  <TableHeaderColumn style={styles.columns.botInGroup}>Accounts in Group</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.botShare}>Bot Shares</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.actions}>Actions</TableHeaderColumn>
                 </TableRow>

@@ -17,6 +17,7 @@ const data = {
     { text: 'Stream Video', icon: <Web/>, link: '/stream' },
     //{ text: 'Stream Video Form', icon: <Web/>, link: '/streamVideoForm' },
     { text: 'Group Mngt', icon: <Web/>, link: '/groupMngt' },
+    { text: 'Setting Mngt', icon: <Web/>, link: '/settingMngt' },
   ],
   tablePage: {
     items: [
@@ -59,6 +60,12 @@ const data = {
       {id: 1547184938658515, name: 'dev fb', url: 'https://www.facebook.com/groups/1547184938658515/', botsInGroup: 50, botShares : 25},
       {id: 1547184938658516, name: 'dev fb', url: 'https://www.facebook.com/groups/1547184938658515/', botsInGroup: 100, botShares : 25},
     ]
+  },
+  
+  settingPage : {
+    items: [
+        {id: 1547184938658515, key: 'access_token', value: 'sss',  role : 1},
+      ]
   },
   
   dashBoardPage: {

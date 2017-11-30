@@ -8,6 +8,7 @@ import TablePage from './containers/TablePage';
 import StreamVideoPage from './containers/StreamVideoPage';
 import StreamVideoFormPage from './containers/StreamVideoFormPage';
 import GroupManagementPage from './containers/GroupManagementPage';
+import SettingMngtPage from './containers/SettingMngtPage';
 import Dashboard from './containers/DashboardPage';
 
 export default (
@@ -21,6 +22,7 @@ export default (
       <Route path="stream" component={StreamVideoPage}/>
       <Route path="streamVideoForm" component={StreamVideoFormPage}/>
       <Route path="groupMngt" component={GroupManagementPage}/>
+      <Route path="settingMngt" component={SettingMngtPage}/>
       <Route path="*" component={NotFoundPage}/>
     </Route>
   </Route>

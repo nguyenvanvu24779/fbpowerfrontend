@@ -17,28 +17,29 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1)
 }
 
-const API_ROOT = 'http://45.117.171.237:1337/'
+const API_ROOT = 'http://facebook-nguyenvanvu.c9users.io:8080/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema) {
+function callApi(endpoint, schema, options) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
 
-  return fetch(fullUrl)
+  return fetch(fullUrl, options)
     .then(response =>
       response.json().then(json => ({ json, response }))
     ).then(({ json, response }) => {
       if (!response.ok) {
         return Promise.reject(json)
       }
+      return json;
 
-      const camelizedJson = camelizeKeys(json)
-      const nextPageUrl = getNextPageUrl(response)
+      //const camelizedJson = camelizeKeys(json)
+      //const nextPageUrl = getNextPageUrl(response)
 
-      return Object.assign({},
-        normalize(camelizedJson, schema),
-        { nextPageUrl }
-      )
+      //return Object.assign({},
+      //  normalize(camelizedJson, schema),
+     //   { nextPageUrl }
+     // )
     })
     .then(
       response => ({response}),
@@ -65,6 +66,19 @@ export const fetchAddGroup = (typeAdd, ids) => {
   }
   
 } 
+
+
+
+export const fetchGetSettings = () =>{
+  console.log('[api] fetchGetSettings')
+  return callApi(`settings`, {})
+} 
+
+
+export const updateSettings = (data) =>{
+  return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})
+} 
+
 export const fetchUser = login => callApi(`users/${login}`, {})
 export const fetchRepo = fullName => callApi(`repos/${fullName}`, {})
 export const fetchStarred = url => callApi(url, {})

@@ -11,12 +11,16 @@ function createRequestTypes(base) {
 }
 
 export const GROUPS = createRequestTypes('GROUPS')
+export const SETTINGS = createRequestTypes('SETTINGS')
+export const UPDATESETTINGS = createRequestTypes('UPDATESETTINGS')
 export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
 export const STARRED = createRequestTypes('STARRED')
 export const STARGAZERS = createRequestTypes('STARGAZERS')
 
 export const ADD_GROUPS = 'ADD_GROUPS'
+export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
 export const NAVIGATE =  'NAVIGATE'
 export const LOAD_USER_PAGE = 'LOAD_USER_PAGE'
@@ -28,6 +32,19 @@ export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
 function action(type, payload = {}) {
   return {type, ...payload}
+}
+
+
+export const settings = {
+  request: () => action(SETTINGS[REQUEST]),
+  success: (response) => action(SETTINGS[SUCCESS], { response}),
+  failure: (error) => action(SETTINGS[FAILURE], {error}),
+}
+
+export const updateSettings = {
+  request: () => action(UPDATESETTINGS[REQUEST]),
+  success: (response) => action(UPDATESETTINGS[SUCCESS], { response}),
+  failure: (error) => action(UPDATESETTINGS[FAILURE], {error}),
 }
 
 export const user = {
@@ -54,7 +71,9 @@ export const stargazers = {
   failure: (fullName, error) => action(STARGAZERS[FAILURE], {fullName, error}),
 }
 
-export const addGroup = data => action(ADD_GROUPS,{data} ) 
+export const addGroup = data => action(ADD_GROUPS,{data} )
+export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
+export const callupdateSettings = (data) => action(UPDATE_SETTINGS, {data})
 export const updateRouterState = state => action(UPDATE_ROUTER_STATE, {state})
 export const navigate = pathname => action(NAVIGATE, {pathname})
 export const loadUserPage = (login, requiredFields = []) => action(LOAD_USER_PAGE, {login, requiredFields})
