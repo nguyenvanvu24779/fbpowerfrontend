@@ -16,7 +16,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux'
-import { addGroup} from '../actions'
+import { addGroup, loadGroup} from '../actions'
+import RaisedButton from 'material-ui/RaisedButton';
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -66,6 +67,15 @@ const styles = {
       botInGroup: {
         width: '10%'
       },
+      question: {
+        width: '10%'
+      },
+    },
+    btnLoad : {
+        marginTop : 10
+    },
+    input : {
+      marginLeft : 10,
     }
   };
 
@@ -79,10 +89,21 @@ class GroupManagementPage extends React.Component  {
           open: false,
           openAddGroup : false,
           typeAdd : 0, // 0 - group id, 1 - video id,
-          ids : []
+          ids : [],
+          page : 1,
+          per_page : 20 ,
+         loadding : false,
         };
     }
-  
+    componentDidMount(){
+      this.props.loadGroup({page : 1, per_page : 20});
+    
+    }
+    componentWillReceiveProps(newProps) {
+      //console.log(newProps)
+      this.setState({loadding : false})
+    }
+    
     handleTouchTap = (event) => {
          // This prevents ghost click.
         event.preventDefault();
@@ -122,10 +143,28 @@ class GroupManagementPage extends React.Component  {
         ids: event.target.value.split("|"),
       });
     }
+    
+    handleLoadGroups = () => {
+      this.props.loadGroup({page : this.state.page, per_page : this.state.per_page});
+      this.setState({loadding : true})
+    }
+    
+    handleOnChangePageNumber = (event) =>{
+      this.setState({
+        page: event.target.value,
+      });
+    }
+    
+    handleOnChangePerPage = (event) =>{
+      this.setState({
+        per_page: event.target.value,
+      });
+    }
   
 
     render(){
-        const actions = [
+      const {groups, meta} = this.props;
+      const actions = [
             <FlatButton
               label="Ok"
               primary={true}
@@ -136,7 +175,22 @@ class GroupManagementPage extends React.Component  {
     return (
         <PageBase title="Group Management Page"
                   navigation="Application / Group Management Page">
+                  
         <div>
+            <RaisedButton label="Load" style={styles.btnLoad} primary={true} onClick = {this.handleLoadGroups} disabled = {this.state.loadding}/>
+            <TextField
+                  style ={styles.input}
+                  hintText={"Page Number"}
+                  floatingLabelText={"Page Number"}
+                  onChange = {this.handleOnChangePageNumber}
+                  />
+             <TextField
+                  style ={styles.input}
+                  hintText={"Row per Page"}
+                  floatingLabelText={"Row per Page"}
+                  onChange = {this.handleOnChangePerPage}
+                  />      
+            {meta ?  "    Total: "  + meta.total : null}
             <Dialog
                 title="Add Group"
                 actions={actions}
@@ -174,19 +228,21 @@ class GroupManagementPage extends React.Component  {
                   <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.name}>Name</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.url}>URL</TableHeaderColumn>
+                  <TableHeaderColumn style={styles.columns.question}>Question</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.botInGroup}>Accounts in Group</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.botShare}>Bot Shares</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.actions}>Actions</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
-                {Data.groupPage.items.map(item =>
-                  <TableRow key={item.id}>
-                    <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
+                {groups && groups.length > 0 ? groups.map(item =>
+                  <TableRow key={item.groupId}>
+                    <TableRowColumn style={styles.columns.id}>{item.groupId}</TableRowColumn>
                     <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
                     <TableRowColumn style={styles.columns.url}>
-                        <a target='_blank' href={item.url}>{item.url} </a>
+                        <a target='_blank' href={item.url}>{"http://fb.com/" + item.groupId} </a>
                     </TableRowColumn>
+                    <TableRowColumn style={styles.columns.question}>{item.question.length > 0 ? 'Answer' : 'None'}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botInGroup}>{item.botsInGroup}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botShare}>{item.botShares}</TableRowColumn>
                     <TableRowColumn style={styles.columns.actions}>
@@ -208,7 +264,7 @@ class GroupManagementPage extends React.Component  {
                         </IconButton>
                     </TableRowColumn>
                   </TableRow>
-                )}
+                ) : null}
               </TableBody>
             </Table>    
           </div>
@@ -222,6 +278,6 @@ GroupManagementPage.propTypes = {
 }
 
 export default connect(
-  state => ({}),
-  { addGroup }
+  state => ({groups : state.entities.groups, meta : state.entities.meta}),
+  { addGroup , loadGroup}
 )(GroupManagementPage)

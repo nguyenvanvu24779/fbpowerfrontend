@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings} = actions
+const {settings , updateSettings, groups} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -24,7 +24,7 @@ function* fetchEntity(entity, apiFn, id, url) {
 // yeah! we can also bind Generators
 export const fetchSettings       = fetchEntity.bind(null, settings ,api.fetchGetSettings)
 export const callUpdateSettings       = fetchEntity.bind(null, updateSettings ,api.updateSettings)
-
+export const fetchGroups       = fetchEntity.bind(null, groups ,api.fetchGetGroups)
 
 function* callAddGroup(typeAdd, ids) {
   yield call(api.fetchAddGroup, typeAdd, ids)
@@ -43,6 +43,12 @@ function* callGetSettings(){
   
 }
 
+function* callGetGroups(data){
+  console.log('[sagas] callGetGroups');
+  yield call(fetchGroups, data)
+  
+}
+
 function* watchUpdateSettings(){
   while(true){
     const {data} =  yield take(actions.UPDATE_SETTINGS)
@@ -51,8 +57,6 @@ function* watchUpdateSettings(){
     yield call(fetchSettings) 
     
   }
-  
-  
 }
 
 function* watchGetSettings() {
@@ -63,10 +67,20 @@ function* watchGetSettings() {
   }
 }
 
+
+function* watchGetGroups() {
+  console.log('[sagas] callGetSettings');
+  while(true){
+    const {data} = yield take(actions.LOAD_GROUPS)
+    yield fork(callGetGroups, data)
+  }
+}
+
 export default function* root() {
   yield all([
     fork(watchAddGroup),
     fork(watchGetSettings),
-    fork(watchUpdateSettings)
+    fork(watchUpdateSettings),
+    fork(watchGetGroups)
   ])
 }

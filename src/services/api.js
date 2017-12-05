@@ -74,6 +74,11 @@ export const fetchGetSettings = () =>{
   return callApi(`settings`, {})
 } 
 
+export const fetchGetGroups = (data) =>{
+  console.log('[api] fetchGetGroups')
+  return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}` , {})
+} 
+
 
 export const updateSettings = (data) =>{
   return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})

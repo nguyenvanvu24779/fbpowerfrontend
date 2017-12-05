@@ -19,6 +19,7 @@ export const STARRED = createRequestTypes('STARRED')
 export const STARGAZERS = createRequestTypes('STARGAZERS')
 
 export const ADD_GROUPS = 'ADD_GROUPS'
+export const LOAD_GROUPS = 'LOAD_GROUPS'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
@@ -40,6 +41,13 @@ export const settings = {
   success: (response) => action(SETTINGS[SUCCESS], { response}),
   failure: (error) => action(SETTINGS[FAILURE], {error}),
 }
+
+export const groups = {
+  request: () => action(GROUPS[REQUEST]),
+  success: (response) => action(GROUPS[SUCCESS], { response}),
+  failure: (error) => action(GROUPS[FAILURE], {error}),
+}
+
 
 export const updateSettings = {
   request: () => action(UPDATESETTINGS[REQUEST]),
@@ -72,6 +80,7 @@ export const stargazers = {
 }
 
 export const addGroup = data => action(ADD_GROUPS,{data} )
+export const loadGroup = data => action(LOAD_GROUPS,{data} )
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
 export const callupdateSettings = (data) => action(UPDATE_SETTINGS, {data})
 export const updateRouterState = state => action(UPDATE_ROUTER_STATE, {state})

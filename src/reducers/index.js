@@ -11,6 +11,10 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
   if(action.type == "SETTINGS_SUCCESS" &&  action.response ){
       return merge({}, state, {settings : action.response })
   }
+  if(action.type == "GROUPS_SUCCESS" &&  action.response ){
+      if(state) state.groups = {};
+      return merge({}, state, {groups : action.response.data , meta : action.response.meta})
+  }
 
   return state
 }

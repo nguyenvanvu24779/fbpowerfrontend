@@ -26,7 +26,7 @@ var io = sailsIOClient(socketIOClient);
 
 // Set some options:
 // (you have to specify the host and port of the Sails backend when using this library from Node.js)
-io.sails.url = 'http://facebook-nguyenvanvu.c9users.io:8080';
+io.sails.url = 'http://facebook-nguyenvanvu.c9users.io:8080/';
 
 
 import Data from '../data';
