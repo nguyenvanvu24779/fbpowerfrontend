@@ -7,40 +7,43 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import {pink500, grey200, grey500} from 'material-ui/styles/colors';
 import PageBase from '../components/PageBase';
 import Data from '../data';
-import { loadSettingsPage, callupdateSettings} from '../actions'
+import { loadSettingsPage, callupdateSettings,defaultSettings} from '../actions'
 import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 const styles = {
-floatingActionButton: {
-  margin: 0,
-  top: 'auto',
-  right: 20,
-  bottom: 20,
-  left: 'auto',
-  position: 'fixed',
-},
-editButton: {
-  fill: grey500
-},
-columns: {
-  id: {
-    width: '20%'
+  floatingActionButton: {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'fixed',
   },
-  key: {
-    width: '20%'
+  editButton: {
+    fill: grey500
   },
-  value: {
-    width: '20%'
+  columns: {
+    id: {
+      width: '20%'
+    },
+    key: {
+      width: '20%'
+    },
+    value: {
+      width: '20%'
+    },
+    edit: {
+      width: '10%'
+    }
   },
-  edit: {
-    width: '10%'
-  }
-}
+  btnLoad : {
+          marginTop : 10
+  },
 };
 
 
@@ -52,7 +55,8 @@ class  SettingMngtPage extends React.Component  {
           openEdit : false,
           value : '',
           key : '',
-          textEdit : ''
+          textEdit : '',
+          openDefaultSetting : false
         };
         
     }
@@ -65,9 +69,12 @@ class  SettingMngtPage extends React.Component  {
             openEdit: false,
             id : '',
             value : '',
-            key : ''
+            key : '', 
+            openDefaultSetting : false
         });
     };
+    
+    
     
     handleEdit = () => {
       console.log(this.state.textEdit)
@@ -91,6 +98,16 @@ class  SettingMngtPage extends React.Component  {
         textEdit: event.target.value
       });
     }
+    
+    handleDefaultSettingOpen = () =>{
+      this.setState({openDefaultSetting : true})
+    }
+    
+    handleDefaultSetting = () =>{
+      this.props.defaultSettings();
+      this.setState({openDefaultSetting : false});
+    }
+    
     render(){
       const {settings} = this.props;
       const actions = [
@@ -100,10 +117,23 @@ class  SettingMngtPage extends React.Component  {
               keyboardFocused={true}
               onClick={this.handleEdit.bind(this)}
             />];
+      const actionsDefaulSetting = [
+        <FlatButton
+          label="Cancel"
+          primary={true}
+          onClick={this.handleRequestClose}
+        />,
+        <FlatButton
+          label="OK"
+          primary={true}
+          onClick={this.handleDefaultSetting}
+        />,
+    ];
         return (
                 <PageBase title="Setting Page"
                           navigation="Application / Setting Page">
                   <div>
+                  <RaisedButton label="Default Setting" style={styles.btnLoad} primary={true} onClick = {this.handleDefaultSettingOpen}/>
                   <Dialog
                       title="Edit Setting"
                       actions={actions}
@@ -119,6 +149,14 @@ class  SettingMngtPage extends React.Component  {
                         onChange={this.handleOnChangeValue}
                       />
                   </Dialog>
+                   <Dialog
+                      actions={actionsDefaulSetting}
+                      modal={false}
+                      open={this.state.openDefaultSetting}
+                      onRequestClose={this.handleRequestClose}
+                    >
+                      Default Settings ?
+                    </Dialog>
             
                     <Table>
                       <TableHeader>
@@ -162,5 +200,5 @@ SettingMngtPage.propTypes = {
 
 export default connect(
   state => ({settings : state.entities.settings}),
-  { loadSettingsPage ,callupdateSettings}
+  { loadSettingsPage ,callupdateSettings, defaultSettings}
 )(SettingMngtPage)

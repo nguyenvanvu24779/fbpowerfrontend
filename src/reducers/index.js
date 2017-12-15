@@ -15,7 +15,6 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       if(state) state.groups = {};
       return merge({}, state, {groups : action.response.data , meta : action.response.meta})
   }
-
   return state
 }
 

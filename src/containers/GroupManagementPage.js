@@ -16,7 +16,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux'
-import { addGroup, loadGroup} from '../actions'
+import { addGroup, loadGroup, deleteGroup, updateGroup} from '../actions'
 import RaisedButton from 'material-ui/RaisedButton';
 
 const DeleteIcon = (props) => (
@@ -88,11 +88,15 @@ class GroupManagementPage extends React.Component  {
         this.state = {
           open: false,
           openAddGroup : false,
+          openAnswer : false,
           typeAdd : 0, // 0 - group id, 1 - video id,
           ids : [],
           page : 1,
           per_page : 20 ,
-         loadding : false,
+          loadding : false,
+          arrAnswer : [],
+          arrQuestion : [],
+          group : {}
         };
     }
     componentDidMount(){
@@ -160,16 +164,48 @@ class GroupManagementPage extends React.Component  {
         per_page: event.target.value,
       });
     }
+    handleDeleteGroup = (id) => {
+      this.props.deleteGroup({id: id })
+    }
+    handleAddAnswer  = (item) => {
+       //console.log(item)
+       this.setState({openAnswer: true, arrQuestion : item.question, group : item, arrAnswer : item.answer ? item.answer : []  });
+       //console.log(thi)
+    }
+    
+    handleCloseAnswer = () => {
+       this.setState({openAnswer: false});
+    }
+    handleCallAddAnswer = () => {
+      //console.log(this.state.arrAnswer)
+      this.props.updateGroup({ id : this.state.group.id,answer : this.state.arrAnswer })
+      this.setState({openAnswer: false});
+      
+    }
+    handleChangeTextAnswer = (item, index , event) => {
+      var arrAnswer = this.state.arrAnswer;
+      arrAnswer[index] = event.target.value;
+      this.setState({arrAnswer :  arrAnswer})
+    }
   
 
     render(){
       const {groups, meta} = this.props;
+      const {arrQuestion, group ,arrAnswer} = this.state;
       const actions = [
             <FlatButton
               label="Ok"
               primary={true}
               keyboardFocused={true}
               onClick={this.handleAddGroup.bind(this)}
+            />
+        ];  
+      const actionsAddAnswer = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCallAddAnswer.bind(this)}
             />
         ];  
     return (
@@ -206,6 +242,21 @@ class GroupManagementPage extends React.Component  {
                   onChange={this.handleOnChangeIds}
                 />
             </Dialog>
+            <Dialog
+                title="Answer"
+                actions={actionsAddAnswer}
+                modal={false}
+                open={this.state.openAnswer}
+                onRequestClose={this.handleCloseAnswer}
+                autoScrollBodyContent={true}
+            >
+                {arrQuestion.map( (item, index) => 
+                  <div>
+                  <div dangerouslySetInnerHTML={{__html: item}} />
+                  <textarea   onChange={(event) => this.handleChangeTextAnswer(item, index, event)} style={{height : 150, width : 500}} value={arrAnswer && arrAnswer.length > 0 ? arrAnswer[index] : ''}></textarea>
+                  </div>
+                )}    
+            </Dialog>
             <Popover
               open={this.state.open}
               anchorEl={this.state.anchorEl}
@@ -240,25 +291,21 @@ class GroupManagementPage extends React.Component  {
                     <TableRowColumn style={styles.columns.id}>{item.groupId}</TableRowColumn>
                     <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
                     <TableRowColumn style={styles.columns.url}>
-                        <a target='_blank' href={item.url}>{"http://fb.com/" + item.groupId} </a>
+                        <a target='_blank' className="active" href={item.url}>{"http://fb.com/" + item.groupId} </a>
                     </TableRowColumn>
-                    <TableRowColumn style={styles.columns.question}>{item.question.length > 0 ? 'Answer' : 'None'}</TableRowColumn>
+                    <TableRowColumn style={styles.columns.question}>
+                      {item.question && item.question.length > 0 ? 
+                        <a onClick={() => this.handleAddAnswer(item)}>{ item.answer && item.answer.length > 0 ? 'Answer/Edit' : 'Answer'}</a> 
+                        : 
+                        'None'}
+                    </TableRowColumn>
                     <TableRowColumn style={styles.columns.botInGroup}>{item.botsInGroup}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botShare}>{item.botShares}</TableRowColumn>
                     <TableRowColumn style={styles.columns.actions}>
-                        <Link className="button" to="/editGroup">
-                            <FloatingActionButton zDepth={0}
-                                                  mini={true}
-                                                  backgroundColor={grey200}
-                                                  iconStyle={styles.editButton}>
-                              <ContentCreate  />
-                            </FloatingActionButton>
-                        </Link>
-                        <Link className="button" to="/delete">
-                            <IconButton>
-                              <DeleteIcon  color={red500} />
-                            </IconButton>
-                        </Link>
+                        <IconButton onClick={() => this.handleDeleteGroup(item.id)}>
+                          <DeleteIcon  color={red500} />
+                        </IconButton>
+
                         <IconButton>
                               <RefreshIcon  color={greenA200} />
                         </IconButton>
@@ -279,5 +326,5 @@ GroupManagementPage.propTypes = {
 
 export default connect(
   state => ({groups : state.entities.groups, meta : state.entities.meta}),
-  { addGroup , loadGroup}
+  { addGroup , loadGroup, deleteGroup, updateGroup}
 )(GroupManagementPage)

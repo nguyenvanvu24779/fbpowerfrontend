@@ -26,7 +26,7 @@ var io = sailsIOClient(socketIOClient);
 
 // Set some options:
 // (you have to specify the host and port of the Sails backend when using this library from Node.js)
-io.sails.url = 'http://facebook-nguyenvanvu.c9users.io:8080/';
+io.sails.url = 'http://45.117.171.237:1337/';
 
 
 import Data from '../data';
@@ -113,8 +113,8 @@ class App extends React.Component {
       floatingActionButton: {
         margin: 0,
         top: 'auto',
-        right: 120,
-        bottom: 20,
+        right: 0,
+        bottom: 100,
         left: 'auto',
         position: 'fixed',
       },
@@ -123,7 +123,7 @@ class App extends React.Component {
         marginTop : 200, 
         top: 'auto',
         right: 0,
-        bottom: 100,
+        bottom: 160,
         left: 'auto',
         position: 'fixed',
         zIndex: '9998',

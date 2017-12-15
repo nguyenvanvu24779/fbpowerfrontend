@@ -13,16 +13,21 @@ function createRequestTypes(base) {
 export const GROUPS = createRequestTypes('GROUPS')
 export const SETTINGS = createRequestTypes('SETTINGS')
 export const UPDATESETTINGS = createRequestTypes('UPDATESETTINGS')
+export const DELETEGROUPS = createRequestTypes('DELETEGROUPS')
+export const UPDATEGROUPS = createRequestTypes('UPDATEGROUPS')
 export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
 export const STARRED = createRequestTypes('STARRED')
 export const STARGAZERS = createRequestTypes('STARGAZERS')
 
 export const ADD_GROUPS = 'ADD_GROUPS'
+export const DELETE_GROUPS = 'DELETE_GROUPS'
 export const LOAD_GROUPS = 'LOAD_GROUPS'
+export const UPDATE_GROUP = 'UPDATE_GROUP'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
+export const DEFAUL_SETTINGS = 'DEFAUL_SETTINGS'
 export const NAVIGATE =  'NAVIGATE'
 export const LOAD_USER_PAGE = 'LOAD_USER_PAGE'
 export const LOAD_REPO_PAGE = 'LOAD_REPO_PAGE'
@@ -46,6 +51,18 @@ export const groups = {
   request: () => action(GROUPS[REQUEST]),
   success: (response) => action(GROUPS[SUCCESS], { response}),
   failure: (error) => action(GROUPS[FAILURE], {error}),
+}
+
+export const deleteGroups = {
+  request: () => action(DELETEGROUPS[REQUEST]),
+  success: (response) => action(DELETEGROUPS[SUCCESS], { response}),
+  failure: (error) => action(DELETEGROUPS[FAILURE], {error}),
+}
+
+export const updateGroups = {
+  request: () => action(UPDATEGROUPS[REQUEST]),
+  success: (response) => action(UPDATEGROUPS[SUCCESS], { response}),
+  failure: (error) => action(UPDATEGROUPS[FAILURE], {error}),
 }
 
 
@@ -80,8 +97,11 @@ export const stargazers = {
 }
 
 export const addGroup = data => action(ADD_GROUPS,{data} )
+export const deleteGroup = data => action(DELETE_GROUPS,{data} )
 export const loadGroup = data => action(LOAD_GROUPS,{data} )
+export const updateGroup = data => action(UPDATE_GROUP, {data})
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
+export const defaultSettings = () => action(DEFAUL_SETTINGS)
 export const callupdateSettings = (data) => action(UPDATE_SETTINGS, {data})
 export const updateRouterState = state => action(UPDATE_ROUTER_STATE, {state})
 export const navigate = pathname => action(NAVIGATE, {pathname})

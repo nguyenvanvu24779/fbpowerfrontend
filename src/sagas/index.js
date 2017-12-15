@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups } = actions
 
 /***************************** Subroutines ************************************/
 
@@ -25,6 +25,9 @@ function* fetchEntity(entity, apiFn, id, url) {
 export const fetchSettings       = fetchEntity.bind(null, settings ,api.fetchGetSettings)
 export const callUpdateSettings       = fetchEntity.bind(null, updateSettings ,api.updateSettings)
 export const fetchGroups       = fetchEntity.bind(null, groups ,api.fetchGetGroups)
+export const defaultSettings       = fetchEntity.bind(null, groups ,api.defaultSettings)
+export const callDeleteGroup       = fetchEntity.bind(null, deleteGroups ,api.deleteGroup)
+export const callAddAnswer       = fetchEntity.bind(null, updateGroups ,api.addAnswer)
 
 function* callAddGroup(typeAdd, ids) {
   yield call(api.fetchAddGroup, typeAdd, ids)
@@ -43,9 +46,39 @@ function* callGetSettings(){
   
 }
 
+
 function* callGetGroups(data){
   console.log('[sagas] callGetGroups');
   yield call(fetchGroups, data)
+  
+}
+
+function* watchDeleteGroups(){
+  while(true){
+    const {data} = yield take(actions.DELETE_GROUPS)
+    console.log('[sagas] watchDeleteGroups');
+    yield call(callDeleteGroup, data)
+    yield call(fetchGroups, {page : 1, per_page : 20})
+  }
+  
+}
+
+
+function* callUpdateGroup(){
+  while(true){
+    const {data} = yield take(actions.UPDATE_GROUP)
+    console.log('[sagas] callUpdateGroup');
+    yield call(callAddAnswer, data)
+  }
+  
+}
+
+function* callDefaultSetting(){
+  while(true){
+    const {data} = yield take(actions.DEFAUL_SETTINGS)
+    console.log('[sagas] callDefaultSetting');
+    yield call(defaultSettings)
+  }
   
 }
 
@@ -81,6 +114,9 @@ export default function* root() {
     fork(watchAddGroup),
     fork(watchGetSettings),
     fork(watchUpdateSettings),
-    fork(watchGetGroups)
+    fork(watchGetGroups),
+    fork(callDefaultSetting),
+    fork(watchDeleteGroups),
+    fork(callUpdateGroup)
   ])
 }

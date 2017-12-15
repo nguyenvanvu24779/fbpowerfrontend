@@ -17,7 +17,7 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1)
 }
 
-const API_ROOT = 'http://facebook-nguyenvanvu.c9users.io:8080/'
+const API_ROOT = 'http://45.117.171.237:1337/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -82,6 +82,19 @@ export const fetchGetGroups = (data) =>{
 
 export const updateSettings = (data) =>{
   return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})
+} 
+
+export const defaultSettings = () =>{
+   callApi("settings/create?key=access_token&value={}" , {}, {method : 'GET'});
+  return callApi("settings/create?key=account_global&value={}" , {}, {method : 'GET'});
+} 
+
+export const deleteGroup = (data) =>{
+  return callApi("groups/" + data.id , {}, {method : 'DELETE'});
+} 
+
+export const addAnswer = (data) =>{
+  return callApi("groups/" + data.id  , {}, {method : 'POST', body :JSON.stringify({ answer : data.answer }) });
 } 
 
 export const fetchUser = login => callApi(`users/${login}`, {})
