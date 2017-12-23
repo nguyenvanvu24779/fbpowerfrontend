@@ -79,6 +79,11 @@ export const fetchGetGroups = (data) =>{
   return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}` , {})
 } 
 
+export const fetchGetAccountsFB = (data) =>{
+  console.log('[api] fetchGetAccountsFB')
+  return callApi(`AccountsFB/list?page=${data.page}&per_page=${data.per_page}` , {})
+} 
+
 
 export const updateSettings = (data) =>{
   return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})
@@ -92,6 +97,16 @@ export const defaultSettings = () =>{
 export const deleteGroup = (data) =>{
   return callApi("groups/" + data.id , {}, {method : 'DELETE'});
 } 
+
+
+export const deleteAccountsFB = (data) =>{
+  return callApi("AccountsFB/" + data.id , {}, {method : 'DELETE'});
+} 
+
+export const addAccountsFB = (data) =>{
+  return callApi("facebook/addAccountFb2DB", {}, {method : 'POST',body : JSON.stringify( { account : data.account, hashtag : data.hashtag } )});
+} 
+
 
 export const addAnswer = (data) =>{
   return callApi("groups/" + data.id  , {}, {method : 'POST', body :JSON.stringify({ answer : data.answer }) });

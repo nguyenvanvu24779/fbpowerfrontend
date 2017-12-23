@@ -9,6 +9,8 @@ import StreamVideoPage from './containers/StreamVideoPage';
 import StreamVideoFormPage from './containers/StreamVideoFormPage';
 import GroupManagementPage from './containers/GroupManagementPage';
 import SettingMngtPage from './containers/SettingMngtPage';
+import AccountFaceBookPage  from './containers/AccountFaceBookPage';
+import ScheduleJobPage  from './containers/ScheduleJobPage';
 import Dashboard from './containers/DashboardPage';
 
 export default (
@@ -22,7 +24,9 @@ export default (
       <Route path="stream" component={StreamVideoPage}/>
       <Route path="streamVideoForm" component={StreamVideoFormPage}/>
       <Route path="groupMngt" component={GroupManagementPage}/>
+      <Route path="accountFbMngt" component={AccountFaceBookPage}/>
       <Route path="settingMngt" component={SettingMngtPage}/>
+      <Route path="scheduleJob" component={ScheduleJobPage}/>
       <Route path="*" component={NotFoundPage}/>
     </Route>
   </Route>

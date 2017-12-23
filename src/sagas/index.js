@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups } = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -25,9 +25,12 @@ function* fetchEntity(entity, apiFn, id, url) {
 export const fetchSettings       = fetchEntity.bind(null, settings ,api.fetchGetSettings)
 export const callUpdateSettings       = fetchEntity.bind(null, updateSettings ,api.updateSettings)
 export const fetchGroups       = fetchEntity.bind(null, groups ,api.fetchGetGroups)
+export const fetchAccountsFB       = fetchEntity.bind(null, accountsfb ,api.fetchGetAccountsFB)
 export const defaultSettings       = fetchEntity.bind(null, groups ,api.defaultSettings)
 export const callDeleteGroup       = fetchEntity.bind(null, deleteGroups ,api.deleteGroup)
 export const callAddAnswer       = fetchEntity.bind(null, updateGroups ,api.addAnswer)
+export const callDeleteAccountsFB       = fetchEntity.bind(null,  deleteAccountsFB ,api.deleteAccountsFB)
+export const callAddAccountsFB       = fetchEntity.bind(null,  addAccountsFB ,api.addAccountsFB)
 
 function* callAddGroup(typeAdd, ids) {
   yield call(api.fetchAddGroup, typeAdd, ids)
@@ -59,6 +62,27 @@ function* watchDeleteGroups(){
     console.log('[sagas] watchDeleteGroups');
     yield call(callDeleteGroup, data)
     yield call(fetchGroups, {page : 1, per_page : 20})
+  }
+  
+}
+
+
+function* watchAddAccountsFB(){
+  while(true){
+    const {data} = yield take(actions.ADD_ACCOUNTSFB)
+    console.log('[sagas] watchAddAccountsFB');
+    yield call(callAddAccountsFB, data)
+  }
+  
+}
+
+
+function* watchDeleteAccountsFB(){
+  while(true){
+    const {data} = yield take(actions.DELETE_ACCOUNTSFB)
+    console.log('[sagas] watchDeleteAccountsFB');
+    yield call(callDeleteAccountsFB, data)
+    yield call(fetchAccountsFB, {page : 1, per_page : 20})
   }
   
 }
@@ -109,6 +133,15 @@ function* watchGetGroups() {
   }
 }
 
+function* watchGetAccountsFB() {
+  console.log('[sagas] watchGetAccountsFB');
+  while(true){
+    const {data} = yield take(actions.LOAD_ACCOUNTSFB)
+    console.log(data)
+    yield fork(fetchAccountsFB, data)
+  }
+}
+
 export default function* root() {
   yield all([
     fork(watchAddGroup),
@@ -117,6 +150,9 @@ export default function* root() {
     fork(watchGetGroups),
     fork(callDefaultSetting),
     fork(watchDeleteGroups),
-    fork(callUpdateGroup)
+    fork(callUpdateGroup),
+    fork(watchGetAccountsFB),
+    fork(watchDeleteAccountsFB),
+    fork(watchAddAccountsFB)
   ])
 }

@@ -18,6 +18,8 @@ const data = {
     //{ text: 'Stream Video Form', icon: <Web/>, link: '/streamVideoForm' },
     { text: 'Group Mngt', icon: <Web/>, link: '/groupMngt' },
     { text: 'Setting Mngt', icon: <Web/>, link: '/settingMngt' },
+    { text: 'Account FB Mngt', icon: <Web/>, link: '/accountFbMngt' },
+    { text: 'Schedule Job', icon: <Web/>, link: '/scheduleJob' },
   ],
   tablePage: {
     items: [
@@ -35,6 +37,20 @@ const data = {
     items: [
       {id: '1988198441503862', url: 'https://www.facebook.com/80Mpage/videos/1988198441503862/', credit: '$50.00', share: 10,botShare : 7, live : true, status : 1},
       {id: '1988198441503863', url: 'https://www.facebook.com/80Mpage/videos/1988198441503862/', credit: '$50.00', share: 10, botShare : 6,live : false, status : 2},
+    ]
+  },
+  accountFacceBookPage: {
+    items: [
+      {id: '1988198441503862', birthDay  : '01/01/2001', sex: 'Male', groups: 20,from : 'Hanoi, VietNam', name : 'Vu Nguyen', email: 'aa@aa.com',status : 1},
+      {id: '1988198441503863', birthDay : '01/01/2001' , sex: 'Female', groups: 10, from : 'Hcm, VietNam',name  : 'Key ss', email : 'sss@ss.com' ,status : 2},
+    ]
+  },
+  scheduleJobPage: {
+    items: [
+      {id: '1988198441503862', jobName  : 'join groups', startTime: '', endTime : '',  message : 'log > sss', status : 'Running', loopTime : '6 hours'},
+      {id: '1988198441503863', jobName  : 'join groups', startTime: '', endTime  : '',  message : 'log > sss', status : 'Running', loopTime : '6 hours'},
+      {id: '1988198441503864', jobName  : 'join groups', startTime: '', endTime : '',  message : 'log > sss', status : 'Running', loopTime : '6 hours'},
+      {id: '1988198441503865', jobName  : 'join groups', startTime:'', endTime : '',  message : 'log > sss', status : 'Running', loopTime : '6 hours'},
     ]
   },
   groupShare : {

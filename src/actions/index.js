@@ -11,9 +11,12 @@ function createRequestTypes(base) {
 }
 
 export const GROUPS = createRequestTypes('GROUPS')
+export const ACCOUNTSFB = createRequestTypes('ACCOUNTSFB')
 export const SETTINGS = createRequestTypes('SETTINGS')
 export const UPDATESETTINGS = createRequestTypes('UPDATESETTINGS')
 export const DELETEGROUPS = createRequestTypes('DELETEGROUPS')
+export const DELETEACCOUNTSFB = createRequestTypes('DELETEACCOUNTSFB')
+export const ADDACCOUNTSFB = createRequestTypes('ADDACCOUNTSFB')
 export const UPDATEGROUPS = createRequestTypes('UPDATEGROUPS')
 export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
@@ -24,6 +27,9 @@ export const ADD_GROUPS = 'ADD_GROUPS'
 export const DELETE_GROUPS = 'DELETE_GROUPS'
 export const LOAD_GROUPS = 'LOAD_GROUPS'
 export const UPDATE_GROUP = 'UPDATE_GROUP'
+export const LOAD_ACCOUNTSFB = 'LOAD_ACCOUNTSFB'
+export const DELETE_ACCOUNTSFB = 'DELETE_ACCOUNTSFB'
+export const ADD_ACCOUNTSFB = 'ADD_ACCOUNTSFB'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
@@ -52,6 +58,25 @@ export const groups = {
   success: (response) => action(GROUPS[SUCCESS], { response}),
   failure: (error) => action(GROUPS[FAILURE], {error}),
 }
+
+export const accountsfb = {
+  request: () => action(ACCOUNTSFB[REQUEST]),
+  success: (response) => action(ACCOUNTSFB[SUCCESS], { response}),
+  failure: (error) => action(ACCOUNTSFB[FAILURE], {error}),
+}
+export const deleteAccountsFB = {
+  request: () => action(DELETEACCOUNTSFB[REQUEST]),
+  success: (response) => action(DELETEACCOUNTSFB[SUCCESS], { response}),
+  failure: (error) => action(DELETEACCOUNTSFB[FAILURE], {error}),
+}
+
+
+export const addAccountsFB = {
+  request: () => action(ADDACCOUNTSFB[REQUEST]),
+  success: (response) => action(ADDACCOUNTSFB[SUCCESS], { response}),
+  failure: (error) => action(ADDACCOUNTSFB[FAILURE], {error}),
+}
+
 
 export const deleteGroups = {
   request: () => action(DELETEGROUPS[REQUEST]),
@@ -100,6 +125,9 @@ export const addGroup = data => action(ADD_GROUPS,{data} )
 export const deleteGroup = data => action(DELETE_GROUPS,{data} )
 export const loadGroup = data => action(LOAD_GROUPS,{data} )
 export const updateGroup = data => action(UPDATE_GROUP, {data})
+export const loadAccountsFB = data => action(LOAD_ACCOUNTSFB,{data} )
+export const callDeleteAccountsFB = data => action(DELETE_ACCOUNTSFB,{data} )
+export const callAddAccountsFB = data => action(ADD_ACCOUNTSFB,{data} )
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
 export const defaultSettings = () => action(DEFAUL_SETTINGS)
 export const callupdateSettings = (data) => action(UPDATE_SETTINGS, {data})
