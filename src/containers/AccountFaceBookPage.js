@@ -18,7 +18,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { connect } from 'react-redux'
-import {loadAccountsFB, callDeleteAccountsFB, callAddAccountsFB} from '../actions'
+import {loadAccountsFB, callDeleteAccountsFB, callAddAccountsFB, callRefreshAccountsFB} from '../actions'
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -32,6 +32,14 @@ const DetailIcon = (props) => (
     <path d="M3 4l9 16 9-16H3zm3.38 2h11.25L12 16 6.38 6z"/>
   </SvgIcon>
 )
+
+
+const RefreshIcon = (props) => (
+  <SvgIcon {...props}>
+    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+  </SvgIcon>
+);
 
 const styles = {
     floatingActionButton: {
@@ -102,7 +110,7 @@ const styles = {
          width: '10%'
       },
        actions: {
-        width: '10%'
+        width: '15%'
       },
       status : {
         width : '10%'
@@ -187,6 +195,11 @@ class  AccountFaceBookPage extends React.Component {
     handleOpenAccountDetail = (item) => {
       this.setState({openAccountDetail : true});
       this.setState({account : item})
+    }
+    
+    handleRefreshAccount = (item) => {
+      this.props.callRefreshAccountsFB({id : item.id, account : item.username + '|' + item.password})
+      
     }
     
 
@@ -277,6 +290,9 @@ class  AccountFaceBookPage extends React.Component {
                           <IconButton onClick={() => this.handleOpenAccountDetail(item)}>
                             <DetailIcon  color={greenA200} />
                           </IconButton>
+                           <IconButton onClick={() => this.handleRefreshAccount(item)}>
+                            <RefreshIcon  color={greenA200} />
+                          </IconButton>
                           <IconButton onClick={() => this.handleDeleteAccountsFB(item.id)} >
                             <DeleteIcon  color={red500} />
                           </IconButton>
@@ -301,6 +317,6 @@ AccountFaceBookPage.propTypes = {
 
 export default connect(
   state => ({accountsfb : state.entities.accountsfb, meta : state.entities.meta}),
-  {  loadAccountsFB , callDeleteAccountsFB, callAddAccountsFB}
+  {  loadAccountsFB , callDeleteAccountsFB, callAddAccountsFB, callRefreshAccountsFB}
 )(AccountFaceBookPage)
 

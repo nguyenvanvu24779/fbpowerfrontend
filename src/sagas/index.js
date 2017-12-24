@@ -87,6 +87,17 @@ function* watchDeleteAccountsFB(){
   
 }
 
+function* watchRefreshAccountsFB(){
+  while(true){
+    const {data} = yield take(actions.REFRESH_ACCOUNTSFB)
+    console.log('[sagas] watchRefreshAccountsFB');
+    yield call(callDeleteAccountsFB, data)
+    yield call(callAddAccountsFB, data)
+    yield call(fetchAccountsFB, {page : 1, per_page : 20})
+  }
+  
+}
+
 
 function* callUpdateGroup(){
   while(true){
@@ -153,6 +164,7 @@ export default function* root() {
     fork(callUpdateGroup),
     fork(watchGetAccountsFB),
     fork(watchDeleteAccountsFB),
-    fork(watchAddAccountsFB)
+    fork(watchAddAccountsFB),
+    fork(watchRefreshAccountsFB),
   ])
 }

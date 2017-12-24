@@ -29,6 +29,7 @@ export const LOAD_GROUPS = 'LOAD_GROUPS'
 export const UPDATE_GROUP = 'UPDATE_GROUP'
 export const LOAD_ACCOUNTSFB = 'LOAD_ACCOUNTSFB'
 export const DELETE_ACCOUNTSFB = 'DELETE_ACCOUNTSFB'
+export const REFRESH_ACCOUNTSFB = 'REFRESH_ACCOUNTSFB'
 export const ADD_ACCOUNTSFB = 'ADD_ACCOUNTSFB'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
@@ -127,6 +128,7 @@ export const loadGroup = data => action(LOAD_GROUPS,{data} )
 export const updateGroup = data => action(UPDATE_GROUP, {data})
 export const loadAccountsFB = data => action(LOAD_ACCOUNTSFB,{data} )
 export const callDeleteAccountsFB = data => action(DELETE_ACCOUNTSFB,{data} )
+export const callRefreshAccountsFB = data => action(REFRESH_ACCOUNTSFB,{data} )
 export const callAddAccountsFB = data => action(ADD_ACCOUNTSFB,{data} )
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
 export const defaultSettings = () => action(DEFAUL_SETTINGS)
