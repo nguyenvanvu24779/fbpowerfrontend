@@ -18,7 +18,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { connect } from 'react-redux'
-import {} from '../actions'
+import {loadScheduleJobPage} from '../actions'
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -75,22 +75,16 @@ const styles = {
         width: '10%'
       },
       jobName: {
-        width: '10%'
+        width: '15%'
       },
-      startTime: {
-        width: '10%'
+      nextRunAt: {
+        width: '15%'
       },
-      endTime: {
-        width: '10%'
+      repeatInterval: {
+        width: '15%'
       },
-      message: {
-        width: '10%'
-      },
-      status: {
-        width: '10%'
-      },
-      loopTime: {
-        width: '10%'
+      lastRunAt: {
+        width: '15%'
       },
        actions: {
         width: '10%'
@@ -115,8 +109,14 @@ class  ScheduleJobPage extends React.Component {
           account : {}
       };
     };
+    
+    componentDidMount(){
+      this.props.loadScheduleJobPage();
+    
+    }
  
     render(){
+      const {schedulejob} = this.props;
       const actions = [
             <FlatButton
               label="Ok"
@@ -129,42 +129,32 @@ class  ScheduleJobPage extends React.Component {
             <PageBase title="Schedule Job Page"
                       navigation="Application / Schedule Job Page">
               <div>
-                <FloatingActionButton style={styles.floatingActionButton} backgroundColor={pink500}>
-                  <ContentAdd />
-                </FloatingActionButton>
                 <Table selectable={false}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                   <TableRow>
                     <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.jobName}>Job Name</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.startTime}>Start Time</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.endTime}>Start Time</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.message}>Message</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.status}>Status</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.loopTime}>Loop Time</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.columns.nextRunAt}>Next RunAt</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.columns.repeatInterval}>Repeat Interval</TableHeaderColumn>
+                    <TableHeaderColumn style={styles.columns.lastRunAt}>Last RunAt</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.actions}>Actions</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                  {Data.scheduleJobPage.items.map(item =>
+                  {schedulejob && schedulejob.length > 0 ?  schedulejob.map(item =>
                     <TableRow key={item.id}>
                       <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.jobName}>{item.jobName}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.startTime}>{item.startTime}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.endTime}>{item.endTime}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.message}>{item.message}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.status}>{item.status}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.loopTime}>{item.loopTime}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.jobName}>{item.name}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.nextRunAt}>{(new Date(item.nextRunAt)).toLocaleDateString() + ' ' + (new Date(item.nextRunAt)).toLocaleTimeString()}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.repeatInterval}>{item.repeatInterval}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.lastRunAt}>{(new Date(item.lastRunAt)).toLocaleDateString() + ' ' + (new Date(item.lastRunAt)).toLocaleTimeString()}</TableRowColumn>
                       <TableRowColumn style={styles.columns.actions}>
-                          <IconButton >
-                            <DetailIcon  color={greenA200} />
-                          </IconButton>
                           <IconButton >
                             <DeleteIcon  color={red500} />
                           </IconButton>
                       </TableRowColumn>
                     </TableRow>
-                  )}
+                  ) : null}
                 </TableBody>
               </Table>
               </div>
@@ -178,7 +168,7 @@ ScheduleJobPage.propTypes = {
 }
 
 export default connect(
-  state => ({}),
-  {  }
+  state => ({schedulejob : state.entities.schedulejob}),
+  { loadScheduleJobPage }
 )(ScheduleJobPage)
 

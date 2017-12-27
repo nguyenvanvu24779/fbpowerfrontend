@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB, schedulejob} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -31,6 +31,8 @@ export const callDeleteGroup       = fetchEntity.bind(null, deleteGroups ,api.de
 export const callAddAnswer       = fetchEntity.bind(null, updateGroups ,api.addAnswer)
 export const callDeleteAccountsFB       = fetchEntity.bind(null,  deleteAccountsFB ,api.deleteAccountsFB)
 export const callAddAccountsFB       = fetchEntity.bind(null,  addAccountsFB ,api.addAccountsFB)
+export const fetchScheduleJob       = fetchEntity.bind(null,  schedulejob ,api.fetchScheduleJob)
+
 
 function* callAddGroup(typeAdd, ids) {
   yield call(api.fetchAddGroup, typeAdd, ids)
@@ -135,6 +137,14 @@ function* watchGetSettings() {
   }
 }
 
+function* watchGetScheduleJob() {
+  console.log('[sagas] watchGetScheduleJob');
+  while(true){
+    yield take(actions.LOAD_SCHEDULEJOB_PAGE)
+    yield call(fetchScheduleJob)
+  }
+}
+
 
 function* watchGetGroups() {
   console.log('[sagas] callGetSettings');
@@ -166,5 +176,7 @@ export default function* root() {
     fork(watchDeleteAccountsFB),
     fork(watchAddAccountsFB),
     fork(watchRefreshAccountsFB),
+    fork(watchGetScheduleJob)
+    
   ])
 }

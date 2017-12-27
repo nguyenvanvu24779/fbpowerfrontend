@@ -74,6 +74,11 @@ export const fetchGetSettings = () =>{
   return callApi(`settings`, {})
 } 
 
+export const fetchScheduleJob = () =>{
+  console.log('[api] fetchScheduleJob')
+  return callApi(`ScheduleJob`, {})
+} 
+
 export const fetchGetGroups = (data) =>{
   console.log('[api] fetchGetGroups')
   return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}` , {})

@@ -68,7 +68,7 @@ const styles = {
         width: '10%'
       },
       question: {
-        width: '10%'
+        width: '15%'
       },
     },
     btnLoad : {

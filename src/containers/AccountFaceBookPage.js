@@ -284,7 +284,7 @@ class  AccountFaceBookPage extends React.Component {
                       <TableRowColumn style={styles.columns.url}>
                           {item.__user ?  <a target='_blank' className="active" href={"http://fb.com/" + item.__user} >{"http://fb.com/" + item.__user} </a> : null}
                       </TableRowColumn>
-                      <TableRowColumn style={styles.columns.status}>{item.__user ? 'Ok' : 'Fail'}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.status}>{item.__user ? item.status ?  item.status : 'OK' : 'Fail'}</TableRowColumn>
                       <TableRowColumn style={styles.columns.groups}>{item.groups ?  item.groups.length : 'none'}</TableRowColumn>
                       <TableRowColumn style={styles.columns.actions}>
                           <IconButton onClick={() => this.handleOpenAccountDetail(item)}>

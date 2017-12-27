@@ -40,7 +40,9 @@ class  StreamVideoFormPage extends React.Component {
       super(props);
       this.state = {
           checked: false,
-          valueCredit : 100
+          valueCredit : 100,
+          valueTimeShareLimit : 30,
+          valueSharesAmount : 50,
       };
     };
     
@@ -52,37 +54,57 @@ class  StreamVideoFormPage extends React.Component {
         });
     };
     handleChangeCredit = (event, index, valueCredit) => this.setState({valueCredit});
-
-  
+    handleChangeTimeShareLimit =  (event, index, valueTimeShareLimit) => this.setState({valueTimeShareLimit});
+    handleChangeValueSharesAmount =  (event, index, valueSharesAmount) => this.setState({valueSharesAmount});
+    
+    
     render(){
          return (
-            <PageBase title="Stream Video Form Page"
-                      navigation="Application / Stream Video Form Page">
+            <PageBase title="Stream Video Order Form"
+                      navigation="Application / Stream Video Order Form">
               <form>
                 <TextField
-                  hintText="Url Stream"
-                  floatingLabelText="Url Stream"
+                  hintText="Url live stream / Url profile live stream"
+                  floatingLabelText="Url live stream / Url profile live stream"
                   fullWidth={true}
                 />
-        
+                
+                 <SelectField
+                  floatingLabelText="Time Share Limit"
+                  value={this.state.valueTimeShareLimit}
+                  onChange={this.handleChangeTimeShareLimit}
+                  fullWidth={true}>
+                        <MenuItem value={30} primaryText="30min"/>
+                        <MenuItem value={60} primaryText="1h"/>
+                        <MenuItem value={90} primaryText="1h30"/>
+                        <MenuItem value={120} primaryText="2h"/>
+                </SelectField>
+                
                 <SelectField
-                  floatingLabelText="Credit"
-                  value={this.state.valueCredit}
-                  onChange={this.handleChangeCredit}
+                  floatingLabelText="Shares Amount"
+                  value={this.state.valueSharesAmount}
+                  onChange={this.handleChangeValueSharesAmount}
                   fullWidth={true}>
                         <MenuItem value={50} primaryText="50"/>
                         <MenuItem value={100} primaryText="100"/>
+                        <MenuItem value={150} primaryText="150"/>
                         <MenuItem value={200} primaryText="200"/>
-                        <MenuItem value={300} primaryText="300"/>
                 </SelectField>
-                <div style={styles.toggleDiv}>
-                    <Checkbox
-                      label="Dịch vụ 1"
-                      checked={this.state.checked}
-                      onCheck={this.updateCheck.bind(this)}
-                      style={styles.checkbox}
-                    />
-                </div>
+                
+
+                
+                
+                <br/>
+                <br/>
+                {"Credit : " + 100}
+                
+                <TextField
+                  hintText="Note"
+                  floatingLabelText="Note"
+                  multiLine={true}
+                  rows={2}
+                  fullWidth={true}
+                /><br />
         
                 <Divider/>
         
@@ -91,7 +113,7 @@ class  StreamVideoFormPage extends React.Component {
                     <RaisedButton label="Cancel"/>
                   </Link>
         
-                  <RaisedButton label="Start"
+                  <RaisedButton label="Create"
                                 style={styles.saveButton}
                                 type="submit"
                                 primary={true}/>

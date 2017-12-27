@@ -48,6 +48,14 @@ const AddIcon = (props) => (
 );
 
 
+const DeleteIcon = (props) => (
+    <SvgIcon {...props}>
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+    </SvgIcon>
+);
+
+
 const styles = {
     floatingActionButton: {
       margin: 0,
@@ -103,7 +111,7 @@ const styles = {
       status: {
         width: '10%'
       },
-      refresh: {
+      action: {
         width: '10%'
       }
     }
@@ -115,7 +123,7 @@ class StreamVideoPage extends React.Component {
     super(props);
     this.state = {
       open: false,
-      openAddCredit :  false,
+      openAddShareAmount :  false,
       valueCredit : 100,
     };
   };
@@ -129,12 +137,12 @@ class StreamVideoPage extends React.Component {
     this.setState({open: false});
   };
   
-  handleOpenAddCredit = () => {
-    this.setState({openAddCredit: true});
+  handleOpenAddShareAmount = () => {
+    this.setState({openAddShareAmount: true});
   };
 
-   handleCloseAddCredit = () => {
-    this.setState({openAddCredit: false});
+  handleCloseAddShareAmount = () => {
+    this.setState({openAddShareAmount: false});
   };
   
   handleChangeCredit = (event, index, valueCredit) => this.setState({valueCredit});
@@ -154,12 +162,12 @@ class StreamVideoPage extends React.Component {
         <FlatButton
           label="Cancel"
           primary={true}
-          onClick={this.handleCloseAddCredit}
+          onClick={this.handleCloseAddShareAmount}
         />,
         <FlatButton
           label="Ok"
           primary={true}
-          onClick={this.handleCloseAddCredit}
+          onClick={this.handleCloseAddShareAmount}
         />
     ];
   return (
@@ -195,14 +203,14 @@ class StreamVideoPage extends React.Component {
               </List>
           </Dialog>
           <Dialog
-            title="Add credit"
+            title="Add shares amount"
             actions={actionsAddCredit}
             modal={false}
-            open={this.state.openAddCredit}
-            onRequestClose={this.handleCloseAddCredit}
+            open={this.state.openAddShareAmount}
+            onRequestClose={this.handleCloseAddShareAmount}
           >
             <SelectField
-                  floatingLabelText="Credit"
+                  floatingLabelText="Shares amount"
                   value={this.state.valueCredit}
                   onChange={this.handleChangeCredit}
                   fullWidth={true}>
@@ -224,12 +232,12 @@ class StreamVideoPage extends React.Component {
                 <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.url}>URL</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.credit}>Credit</TableHeaderColumn>
-                <TableHeaderColumn style={styles.columns.addCredit}>Add Credit</TableHeaderColumn>
+                <TableHeaderColumn style={styles.columns.addCredit}>Add shares</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.share}>Bot Share / Total Share </TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.botshare}>Share Detail</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.live}>Live</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.status}>Status</TableHeaderColumn>
-                <TableHeaderColumn style={styles.columns.refresh}>Refresh</TableHeaderColumn>
+                <TableHeaderColumn style={styles.columns.action}>Actions</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody  displayRowCheckbox={0}>
@@ -240,7 +248,7 @@ class StreamVideoPage extends React.Component {
                   <TableRowColumn style={styles.columns.credit}>{item.credit}</TableRowColumn>
                   <TableRowColumn style={styles.columns.addCredit}>
                     <IconButton>
-                      { item.live ?  <AddIcon  color={greenA200}  onClick={this.handleOpenAddCredit}/> : <AddIcon  color={grey500}/>}
+                      { item.live ?  <AddIcon  color={greenA200}  onClick={this.handleOpenAddShareAmount}/> : <AddIcon  color={grey500}/>}
                     </IconButton>
                   </TableRowColumn>
                   <TableRowColumn style={styles.columns.share}>{item.botShare}/{item.share}</TableRowColumn>
@@ -253,9 +261,12 @@ class StreamVideoPage extends React.Component {
                      { item.live ? <LiveTvIcon style={styles.iconStyles} color={red500} hoverColor={greenA200} /> : 'None'}
                   </TableRowColumn>
                   <TableRowColumn style={styles.columns.status}>{item.status == 1 ? 'Processing' : 'Done'}</TableRowColumn>
-                   <TableRowColumn style={styles.columns.refresh}>
+                   <TableRowColumn style={styles.columns.action}>
                      <IconButton>
                       <RefreshIcon  color={greenA200} />
+                    </IconButton>
+                    <IconButton>
+                      <DeleteIcon  color={red500}/>
                     </IconButton>
                   </TableRowColumn>
                 </TableRow>
