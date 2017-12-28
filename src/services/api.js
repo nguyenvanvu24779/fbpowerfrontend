@@ -79,10 +79,17 @@ export const fetchScheduleJob = () =>{
   return callApi(`ScheduleJob`, {})
 } 
 
+export const refreshScheduleJob = (data) =>{
+  console.log('[api] refreshScheduleJob')
+  return callApi(`ScheduleJob/refreshJob?jobName=` + data.jobName, {})
+} 
+
 export const fetchGetGroups = (data) =>{
   console.log('[api] fetchGetGroups')
   return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}` , {})
 } 
+
+
 
 export const fetchGetAccountsFB = (data) =>{
   console.log('[api] fetchGetAccountsFB')
@@ -95,8 +102,16 @@ export const updateSettings = (data) =>{
 } 
 
 export const defaultSettings = () =>{
-   callApi("settings/create?key=access_token&value={}" , {}, {method : 'GET'});
-  return callApi("settings/create?key=account_global&value={}" , {}, {method : 'GET'});
+  callApi("settings/create?key=access_token&value={}" , {}, {method : 'GET'});
+  callApi("settings/create?key=groupMemberRequire&value=2000" , {}, {method : 'GET'});
+  callApi("settings/create?key=sharePerAccount&value=1:3" , {}, {method : 'GET'});
+  callApi("settings/create?key=accountsPerOpenode&value=7" , {}, {method : 'GET'});
+  callApi("settings/create?key=sharePerGroup&value=1:1" , {}, {method : 'GET'});
+  callApi("settings/create?key=timeShareLimit&value=[30,60,90,120]" , {}, {method : 'GET'});
+  callApi("settings/create?key=sharesAmount&value=[50,100,150,200,250]" , {}, {method : 'GET'});
+  callApi("settings/create?key=hostGenCooike&value={host : abc.com , port : 80}" , {}, {method : 'GET'});
+  
+  return callApi("settings/create?key=account_global&value={}", {}, {method : 'GET'});
 } 
 
 export const deleteGroup = (data) =>{

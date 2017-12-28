@@ -18,7 +18,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { connect } from 'react-redux'
-import {loadScheduleJobPage} from '../actions'
+import {loadScheduleJobPage, callRefreshScheduleJobPage} from '../actions'
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -32,6 +32,14 @@ const DetailIcon = (props) => (
     <path d="M3 4l9 16 9-16H3zm3.38 2h11.25L12 16 6.38 6z"/>
   </SvgIcon>
 )
+
+const RefreshIcon = (props) => (
+  <SvgIcon {...props}>
+    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+    <path d="M0 0h24v24H0z" fill="none"/>
+  </SvgIcon>
+);
+
 
 const styles = {
     floatingActionButton: {
@@ -75,7 +83,7 @@ const styles = {
         width: '10%'
       },
       jobName: {
-        width: '15%'
+        width: '20%'
       },
       nextRunAt: {
         width: '15%'
@@ -113,6 +121,10 @@ class  ScheduleJobPage extends React.Component {
     componentDidMount(){
       this.props.loadScheduleJobPage();
     
+    };
+    
+    handleRefreshScheduleJob = (item) => {
+        this.props.callRefreshScheduleJobPage({jobName : item.name});
     }
  
     render(){
@@ -132,7 +144,6 @@ class  ScheduleJobPage extends React.Component {
                 <Table selectable={false}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                   <TableRow>
-                    <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.jobName}>Job Name</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.nextRunAt}>Next RunAt</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.repeatInterval}>Repeat Interval</TableHeaderColumn>
@@ -143,14 +154,13 @@ class  ScheduleJobPage extends React.Component {
                 <TableBody displayRowCheckbox={false}>
                   {schedulejob && schedulejob.length > 0 ?  schedulejob.map(item =>
                     <TableRow key={item.id}>
-                      <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
                       <TableRowColumn style={styles.columns.jobName}>{item.name}</TableRowColumn>
                       <TableRowColumn style={styles.columns.nextRunAt}>{(new Date(item.nextRunAt)).toLocaleDateString() + ' ' + (new Date(item.nextRunAt)).toLocaleTimeString()}</TableRowColumn>
                       <TableRowColumn style={styles.columns.repeatInterval}>{item.repeatInterval}</TableRowColumn>
                       <TableRowColumn style={styles.columns.lastRunAt}>{(new Date(item.lastRunAt)).toLocaleDateString() + ' ' + (new Date(item.lastRunAt)).toLocaleTimeString()}</TableRowColumn>
                       <TableRowColumn style={styles.columns.actions}>
-                          <IconButton >
-                            <DeleteIcon  color={red500} />
+                          <IconButton onClick={() => this.handleRefreshScheduleJob(item)} >
+                            <RefreshIcon  color={red500} />
                           </IconButton>
                       </TableRowColumn>
                     </TableRow>
@@ -169,6 +179,6 @@ ScheduleJobPage.propTypes = {
 
 export default connect(
   state => ({schedulejob : state.entities.schedulejob}),
-  { loadScheduleJobPage }
+  { loadScheduleJobPage, callRefreshScheduleJobPage }
 )(ScheduleJobPage)
 

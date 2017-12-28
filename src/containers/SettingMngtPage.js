@@ -159,7 +159,7 @@ class  SettingMngtPage extends React.Component  {
                     </Dialog>
             
                     <Table>
-                      <TableHeader>
+                      <TableHeader  adjustForCheckbox={false} displaySelectAll={false}>
                         <TableRow>
                           <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                           <TableHeaderColumn style={styles.columns.key}>Key</TableHeaderColumn>
@@ -167,7 +167,7 @@ class  SettingMngtPage extends React.Component  {
                           <TableRowColumn style={styles.columns.edit}>Edit</TableRowColumn>
                         </TableRow>
                       </TableHeader>
-                      <TableBody>
+                      <TableBody displayRowCheckbox={false}>
                         { settings.length > 0 ? settings.map(item =>
                           <TableRow key={item.id}>
                             <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>

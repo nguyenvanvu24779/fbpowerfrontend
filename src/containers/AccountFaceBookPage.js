@@ -132,7 +132,9 @@ class  AccountFaceBookPage extends React.Component {
           accountText : '',
           hashtag  : '',
           openAccountDetail : false,
-          account : {}
+          account : {},
+          openComfirm : false,
+          idDelete : ''
       };
     };
     componentDidMount(){
@@ -160,8 +162,13 @@ class  AccountFaceBookPage extends React.Component {
       this.setState({openAddAccount : false})
     };
     handleDeleteAccountsFB = (id) =>  {
-      this.props.callDeleteAccountsFB({id : id})
+        this.setState({openComfirm : true, idDelete : id})
+      //this.props.callDeleteAccountsFB({id : id})
     };
+    handleCallDeleteAccountsFB = () => {
+      this.setState( {openComfirm : false});
+      this.props.callDeleteAccountsFB({id : this.state.idDelete})
+    }
     handleLoadAccountsFB = () => {
        this.props.loadAccountsFB({page : this.state.page, per_page : this.state.per_page});
       this.setState({loadding : true})
@@ -202,6 +209,12 @@ class  AccountFaceBookPage extends React.Component {
       
     }
     
+    handleCloseComfirm = () => {
+      this.setState({openComfirm : false})
+    }
+    
+    
+    
 
   
     render(){
@@ -212,6 +225,20 @@ class  AccountFaceBookPage extends React.Component {
               primary={true}
               keyboardFocused={true}
               onClick={this.handleCallAddAccountsFB.bind(this)}
+            />
+      ];
+       const actionsComfirm = [
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCloseComfirm.bind(this)}
+            />,
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+               onClick={this.handleCallDeleteAccountsFB.bind(this)}
             />
       ];
       return (
@@ -259,6 +286,14 @@ class  AccountFaceBookPage extends React.Component {
                 onRequestClose={this.handleCloseAccountDetail}
                >
                   {JSON.stringify(this.state.account)}
+              </Dialog>
+              <Dialog
+                title="Comfirm account delete?"
+                actions={actionsComfirm}
+                modal={false}
+                open={this.state.openComfirm}
+                onRequestClose={this.handleCloseComfirm}
+               >
               </Dialog>
                 <FloatingActionButton onClick={this.handleOpenAddAccount} style={styles.floatingActionButton} backgroundColor={pink500}>
                   <ContentAdd />

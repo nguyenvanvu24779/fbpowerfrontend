@@ -12,6 +12,7 @@ function createRequestTypes(base) {
 
 export const GROUPS = createRequestTypes('GROUPS')
 export const SCHEDULEJOB = createRequestTypes('SCHEDULEJOB')
+export const REFRESHSCHEDULEJOB = createRequestTypes('REFRESHSCHEDULEJOB')
 export const ACCOUNTSFB = createRequestTypes('ACCOUNTSFB')
 export const SETTINGS = createRequestTypes('SETTINGS')
 export const UPDATESETTINGS = createRequestTypes('UPDATESETTINGS')
@@ -34,6 +35,7 @@ export const REFRESH_ACCOUNTSFB = 'REFRESH_ACCOUNTSFB'
 export const ADD_ACCOUNTSFB = 'ADD_ACCOUNTSFB'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const LOAD_SCHEDULEJOB_PAGE = 'LOAD_SCHEDULEJOB_PAGE'
+export const REFRESH_SCHEDULEJOB_PAGE = 'REFRESH_SCHEDULEJOB_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
 export const DEFAUL_SETTINGS = 'DEFAUL_SETTINGS'
@@ -61,6 +63,15 @@ export const schedulejob = {
   success: (response) => action(SCHEDULEJOB[SUCCESS], { response}),
   failure: (error) => action(SCHEDULEJOB[FAILURE], {error}),
 }
+
+export const refreshschedulejob = {
+  request: () => action(REFRESHSCHEDULEJOB[REQUEST]),
+  success: (response) => action(REFRESHSCHEDULEJOB[SUCCESS], { response}),
+  failure: (error) => action(REFRESHSCHEDULEJOB[FAILURE], {error}),
+}
+
+
+
 
 
 
@@ -142,6 +153,7 @@ export const callRefreshAccountsFB = data => action(REFRESH_ACCOUNTSFB,{data} )
 export const callAddAccountsFB = data => action(ADD_ACCOUNTSFB,{data} )
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
 export const loadScheduleJobPage = () => action(LOAD_SCHEDULEJOB_PAGE)
+export const callRefreshScheduleJobPage = data => action(REFRESH_SCHEDULEJOB_PAGE, {data})
 export const defaultSettings = () => action(DEFAUL_SETTINGS)
 export const callupdateSettings = (data) => action(UPDATE_SETTINGS, {data})
 export const updateRouterState = state => action(UPDATE_ROUTER_STATE, {state})

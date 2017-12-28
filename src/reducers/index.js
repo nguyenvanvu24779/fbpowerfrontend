@@ -12,6 +12,14 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       return merge({}, state, {settings : action.response })
   }
   if(action.type == "SCHEDULEJOB_SUCCESS" &&  action.response ){
+      if( action.response &&  action.response.length  > 0){
+        for (var i = action.response.length - 1; i >= 0; i--) {
+          if((new Date(action.response[i].nextRunAt)).getFullYear() < 2017  || action.response[i].nextRunAt == null){
+              action.response.splice(i, 1);
+          }
+        }
+      }
+        
       return merge({}, state, {schedulejob : action.response })
   }
   if(action.type == "GROUPS_SUCCESS" &&  action.response ){
