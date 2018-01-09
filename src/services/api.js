@@ -96,6 +96,15 @@ export const fetchGetAccountsFB = (data) =>{
   return callApi(`AccountsFB/list?page=${data.page}&per_page=${data.per_page}` , {})
 } 
 
+export const fetchGetContentShare = (data) =>{
+  console.log('[api] fetchGetContentShare')
+  return callApi(`ContentShare/list?page=${data.page}&per_page=${data.per_page}` , {})
+} 
+
+
+export const updateContentShare = (data) =>{
+  return callApi("ContentShare/"+ data.id + "?content=" + data.content , {}, {method : 'PUT'})
+} 
 
 export const updateSettings = (data) =>{
   return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})
@@ -119,6 +128,11 @@ export const deleteGroup = (data) =>{
 } 
 
 
+export const deleteContentShare = (data) =>{
+  return callApi("ContentShare/" + data.id , {}, {method : 'DELETE'});
+} 
+
+
 export const deleteAccountsFB = (data) =>{
   return callApi("AccountsFB/" + data.id , {}, {method : 'DELETE'});
 } 
@@ -130,6 +144,10 @@ export const addAccountsFB = (data) =>{
 
 export const addAnswer = (data) =>{
   return callApi("groups/" + data.id  , {}, {method : 'POST', body :JSON.stringify({ answer : data.answer }) });
+} 
+
+export const addContentShare = (data) =>{
+  return callApi("contentshare/addMulti"   , {}, {method : 'POST', body :JSON.stringify({ contents : data.contents }) });
 } 
 
 export const fetchUser = login => callApi(`users/${login}`, {})

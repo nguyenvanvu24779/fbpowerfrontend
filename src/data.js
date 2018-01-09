@@ -20,6 +20,8 @@ const data = {
     { text: 'Setting Mngt', icon: <Web/>, link: '/settingMngt' },
     { text: 'Account FB Mngt', icon: <Web/>, link: '/accountFbMngt' },
     { text: 'Schedule Job', icon: <Web/>, link: '/scheduleJob' },
+    { text: 'Node Mngt', icon: <Web/>, link: '/nodeMngt' },
+    { text: 'Content Share Mngt', icon: <Web/>, link: '/contentShareMngt' },
   ],
   tablePage: {
     items: [
@@ -81,6 +83,16 @@ const data = {
   settingPage : {
     items: [
         {id: 1547184938658515, key: 'access_token', value: 'sss',  role : 1},
+      ]
+  },
+  
+  contentShareManagementPage : {
+    items: [
+        {id: 1547184938658515, content: 'content 1.....'},
+        {id: 1547184938658516, content: 'content 2.....'},
+        {id: 1547184938658517, content: 'content 3.....'},
+        {id: 1547184938658518, content: 'content 4.....'},
+        {id: 1547184938658519, content: 'content 5.....'},
       ]
   },
   

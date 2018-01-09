@@ -70,6 +70,9 @@ const styles = {
       question: {
         width: '15%'
       },
+      members : {
+        width : '10%'
+      },
     },
     btnLoad : {
         marginTop : 10
@@ -280,6 +283,7 @@ class GroupManagementPage extends React.Component  {
                   <TableHeaderColumn style={styles.columns.name}>Name</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.url}>URL</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.question}>Question</TableHeaderColumn>
+                  <TableHeaderColumn style={styles.columns.members}>Members</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.botInGroup}>Accounts in Group</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.botShare}>Bot Shares</TableHeaderColumn>
                   <TableHeaderColumn style={styles.columns.actions}>Actions</TableHeaderColumn>
@@ -299,6 +303,7 @@ class GroupManagementPage extends React.Component  {
                         : 
                         'None'}
                     </TableRowColumn>
+                    <TableHeaderColumn style={styles.columns.members}>{item.countMembers}</TableHeaderColumn>
                     <TableRowColumn style={styles.columns.botInGroup}>{item.botsInGroup}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botShare}>{item.botShares}</TableRowColumn>
                     <TableRowColumn style={styles.columns.actions}>

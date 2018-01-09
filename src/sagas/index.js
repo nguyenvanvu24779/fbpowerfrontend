@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -33,6 +33,13 @@ export const callDeleteAccountsFB       = fetchEntity.bind(null,  deleteAccounts
 export const callAddAccountsFB       = fetchEntity.bind(null,  addAccountsFB ,api.addAccountsFB)
 export const fetchScheduleJob       = fetchEntity.bind(null,  schedulejob ,api.fetchScheduleJob)
 export const callRefreshScheduleJob       = fetchEntity.bind(null,  refreshschedulejob ,api.refreshScheduleJob)
+export const callAddContentShare      = fetchEntity.bind(null,  addContentShare ,api.addContentShare)
+export const fetchGetContentShare     = fetchEntity.bind(null,  contentShare ,api.fetchGetContentShare)
+export const callUpdateContentShare     = fetchEntity.bind(null,  updateContentShare ,api.updateContentShare)
+export const callDeleteContentShare       = fetchEntity.bind(null, deleteContentShare ,api.deleteContentShare)
+
+
+
 
 function* callAddGroup(typeAdd, ids) {
   yield call(api.fetchAddGroup, typeAdd, ids)
@@ -64,6 +71,16 @@ function* watchDeleteGroups(){
     console.log('[sagas] watchDeleteGroups');
     yield call(callDeleteGroup, data)
     yield call(fetchGroups, {page : 1, per_page : 20})
+  }
+  
+}
+
+function* watchDeleteContentShare(){
+  while(true){
+    const {data} = yield take(actions.DELETE_CONTENTSHARE)
+    console.log('[sagas] watchDeleteContentShare');
+    yield call(callDeleteContentShare, data)
+    yield call(fetchGetContentShare, {page : 1, per_page : 20})
   }
   
 }
@@ -172,6 +189,35 @@ function* watchGetAccountsFB() {
   }
 }
 
+function* watchCallAddContentShare() {
+  console.log('[sagas] watchCallAddContentShare');
+  while(true){
+    const {data} = yield take(actions.ADD_CONTENTSHARE)
+    yield fork(callAddContentShare, data)
+  }
+}
+
+function* watchLoadContentShare() {
+  console.log('[sagas] watchLoadContentShare');
+  while(true){
+    const {data} = yield take(actions.LOAD_CONTENTSHARE)
+    yield fork(fetchGetContentShare, data)
+  }
+}
+
+function* watchUpdateContentShare() {
+  console.log('[sagas] watchLoadContentShare');
+  while(true){
+    const {data} = yield take(actions.UPDATE_CONTENTSHARE)
+    yield fork(callUpdateContentShare, data)
+  }
+}
+
+
+
+
+
+
 export default function* root() {
   yield all([
     fork(watchAddGroup),
@@ -186,7 +232,10 @@ export default function* root() {
     fork(watchAddAccountsFB),
     fork(watchRefreshAccountsFB),
     fork(watchGetScheduleJob),
-    fork(watchRefreshScheduleJob)
-    
+    fork(watchRefreshScheduleJob),
+    fork(watchCallAddContentShare),
+    fork(watchLoadContentShare),
+    fork(watchUpdateContentShare),
+    fork(watchDeleteContentShare)
   ])
 }

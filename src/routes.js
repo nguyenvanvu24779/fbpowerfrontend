@@ -11,6 +11,7 @@ import GroupManagementPage from './containers/GroupManagementPage';
 import SettingMngtPage from './containers/SettingMngtPage';
 import AccountFaceBookPage  from './containers/AccountFaceBookPage';
 import ScheduleJobPage  from './containers/ScheduleJobPage';
+import ContentShareManagementPage  from './containers/ContentShareManagementPage';
 import Dashboard from './containers/DashboardPage';
 
 export default (
@@ -27,6 +28,7 @@ export default (
       <Route path="accountFbMngt" component={AccountFaceBookPage}/>
       <Route path="settingMngt" component={SettingMngtPage}/>
       <Route path="scheduleJob" component={ScheduleJobPage}/>
+      <Route path="contentShareMngt" component={ContentShareManagementPage}/>
       <Route path="*" component={NotFoundPage}/>
     </Route>
   </Route>

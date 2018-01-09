@@ -325,9 +325,7 @@ class  AccountFaceBookPage extends React.Component {
                           <IconButton onClick={() => this.handleOpenAccountDetail(item)}>
                             <DetailIcon  color={greenA200} />
                           </IconButton>
-                           <IconButton onClick={() => this.handleRefreshAccount(item)}>
-                            <RefreshIcon  color={greenA200} />
-                          </IconButton>
+                           
                           <IconButton onClick={() => this.handleDeleteAccountsFB(item.id)} >
                             <DeleteIcon  color={red500} />
                           </IconButton>

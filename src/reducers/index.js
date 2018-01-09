@@ -30,6 +30,10 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       if(state) state.accountsfb = {};
       return merge({}, state, {accountsfb : action.response.data , meta : action.response.meta})
   }
+   if(action.type == "CONTENTSHARE_SUCCESS" &&  action.response ){
+      if(state) state.contentShare = {};
+      return merge({}, state, {contentShare : action.response.data , meta : action.response.meta})
+  }
   return state
 }
 

@@ -11,14 +11,18 @@ function createRequestTypes(base) {
 }
 
 export const GROUPS = createRequestTypes('GROUPS')
+export const CONTENTSHARE = createRequestTypes('CONTENTSHARE')
+export const UPDATECONTENTSHARE = createRequestTypes('UPDATECONTENTSHARE')
 export const SCHEDULEJOB = createRequestTypes('SCHEDULEJOB')
 export const REFRESHSCHEDULEJOB = createRequestTypes('REFRESHSCHEDULEJOB')
 export const ACCOUNTSFB = createRequestTypes('ACCOUNTSFB')
 export const SETTINGS = createRequestTypes('SETTINGS')
 export const UPDATESETTINGS = createRequestTypes('UPDATESETTINGS')
 export const DELETEGROUPS = createRequestTypes('DELETEGROUPS')
+export const DELETECONTENTSHARE = createRequestTypes('DELETECONTENTSHARE')
 export const DELETEACCOUNTSFB = createRequestTypes('DELETEACCOUNTSFB')
 export const ADDACCOUNTSFB = createRequestTypes('ADDACCOUNTSFB')
+export const ADDCONTENTSHARE = createRequestTypes('ADDCONTENTSHARE')
 export const UPDATEGROUPS = createRequestTypes('UPDATEGROUPS')
 export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
@@ -27,16 +31,20 @@ export const STARGAZERS = createRequestTypes('STARGAZERS')
 
 export const ADD_GROUPS = 'ADD_GROUPS'
 export const DELETE_GROUPS = 'DELETE_GROUPS'
+export const DELETE_CONTENTSHARE = 'DELETE_CONTENTSHARE'
 export const LOAD_GROUPS = 'LOAD_GROUPS'
 export const UPDATE_GROUP = 'UPDATE_GROUP'
 export const LOAD_ACCOUNTSFB = 'LOAD_ACCOUNTSFB'
+export const LOAD_CONTENTSHARE = 'LOAD_CONTENTSHARE'
 export const DELETE_ACCOUNTSFB = 'DELETE_ACCOUNTSFB'
 export const REFRESH_ACCOUNTSFB = 'REFRESH_ACCOUNTSFB'
 export const ADD_ACCOUNTSFB = 'ADD_ACCOUNTSFB'
+export const ADD_CONTENTSHARE = 'ADD_CONTENTSHARE'
 export const LOAD_SETTINGS_PAGE = 'LOAD_SETTINGS_PAGE'
 export const LOAD_SCHEDULEJOB_PAGE = 'LOAD_SCHEDULEJOB_PAGE'
 export const REFRESH_SCHEDULEJOB_PAGE = 'REFRESH_SCHEDULEJOB_PAGE'
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS'
+export const UPDATE_CONTENTSHARE = 'UPDATE_CONTENTSHARE'
 export const UPDATE_ROUTER_STATE = 'UPDATE_ROUTER_STATE'
 export const DEFAUL_SETTINGS = 'DEFAUL_SETTINGS'
 export const NAVIGATE =  'NAVIGATE'
@@ -71,8 +79,16 @@ export const refreshschedulejob = {
 }
 
 
-
-
+export const contentShare = {
+  request: () => action(CONTENTSHARE[REQUEST]),
+  success: (response) => action(CONTENTSHARE[SUCCESS], { response}),
+  failure: (error) => action(CONTENTSHARE[FAILURE], {error}),
+}
+export const updateContentShare = {
+  request: () => action(UPDATECONTENTSHARE[REQUEST]),
+  success: (response) => action(UPDATECONTENTSHARE[SUCCESS], { response}),
+  failure: (error) => action(UPDATECONTENTSHARE[FAILURE], {error}),
+}
 
 
 export const groups = {
@@ -99,6 +115,12 @@ export const addAccountsFB = {
   failure: (error) => action(ADDACCOUNTSFB[FAILURE], {error}),
 }
 
+export const addContentShare = {
+  request: () => action(ADDCONTENTSHARE[REQUEST]),
+  success: (response) => action(ADDCONTENTSHARE[SUCCESS], { response}),
+  failure: (error) => action(ADDCONTENTSHARE[FAILURE], {error}),
+}
+
 
 export const deleteGroups = {
   request: () => action(DELETEGROUPS[REQUEST]),
@@ -106,6 +128,12 @@ export const deleteGroups = {
   failure: (error) => action(DELETEGROUPS[FAILURE], {error}),
 }
 
+
+export const deleteContentShare = {
+  request: () => action(DELETECONTENTSHARE[REQUEST]),
+  success: (response) => action(DELETECONTENTSHARE[SUCCESS], { response}),
+  failure: (error) => action(DELETECONTENTSHARE[FAILURE], {error}),
+}
 export const updateGroups = {
   request: () => action(UPDATEGROUPS[REQUEST]),
   success: (response) => action(UPDATEGROUPS[SUCCESS], { response}),
@@ -151,6 +179,7 @@ export const loadAccountsFB = data => action(LOAD_ACCOUNTSFB,{data} )
 export const callDeleteAccountsFB = data => action(DELETE_ACCOUNTSFB,{data} )
 export const callRefreshAccountsFB = data => action(REFRESH_ACCOUNTSFB,{data} )
 export const callAddAccountsFB = data => action(ADD_ACCOUNTSFB,{data} )
+export const callAddContentShare = data => action(ADD_CONTENTSHARE,{data} )
 export const loadSettingsPage = () => action(LOAD_SETTINGS_PAGE)
 export const loadScheduleJobPage = () => action(LOAD_SCHEDULEJOB_PAGE)
 export const callRefreshScheduleJobPage = data => action(REFRESH_SCHEDULEJOB_PAGE, {data})
@@ -162,5 +191,8 @@ export const loadUserPage = (login, requiredFields = []) => action(LOAD_USER_PAG
 export const loadRepoPage = (fullName, requiredFields = []) => action(LOAD_REPO_PAGE, {fullName, requiredFields})
 export const loadMoreStarred = login => action(LOAD_MORE_STARRED, {login})
 export const loadMoreStargazers = fullName => action(LOAD_MORE_STARGAZERS, {fullName})
+export const loadContentShare = data => action(LOAD_CONTENTSHARE,{data} )
+export const callUpdateContentShare = data => action(UPDATE_CONTENTSHARE,{data} )
+export const callDeleteContentShare = data => action(DELETE_CONTENTSHARE,{data} )
 
 export const resetErrorMessage = () => action(RESET_ERROR_MESSAGE)
