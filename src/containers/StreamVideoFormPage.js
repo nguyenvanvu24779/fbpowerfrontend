@@ -9,6 +9,8 @@ import {grey400} from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
 import PageBase from '../components/PageBase';
 import Checkbox from 'material-ui/Checkbox';
+import { loadSettingsPage} from '../actions'
+import { connect } from 'react-redux';
 
 const styles = {
     block: {
@@ -46,6 +48,10 @@ class  StreamVideoFormPage extends React.Component {
       };
     };
     
+    componentDidMount(){
+      this.props.loadSettingsPage();
+    }
+    
     updateCheck = () => {
         this.setState((oldState) => {
           return {
@@ -59,6 +65,13 @@ class  StreamVideoFormPage extends React.Component {
     
     
     render(){
+        const {settings} = this.props;
+        var timeShareLimit = [];
+        var sharesAmount = [];
+        for (var i = 0; i < settings.length; i++) {
+          if(settings[i].key == 'timeShareLimit') timeShareLimit  =  JSON.parse(settings[i].value);
+          if(settings[i].key == 'sharesAmount')   sharesAmount    =  JSON.parse(settings[i].value);
+        }
          return (
             <PageBase title="Stream Video Order Form"
                       navigation="Application / Stream Video Order Form">
@@ -74,10 +87,9 @@ class  StreamVideoFormPage extends React.Component {
                   value={this.state.valueTimeShareLimit}
                   onChange={this.handleChangeTimeShareLimit}
                   fullWidth={true}>
-                        <MenuItem value={30} primaryText="30min"/>
-                        <MenuItem value={60} primaryText="1h"/>
-                        <MenuItem value={90} primaryText="1h30"/>
-                        <MenuItem value={120} primaryText="2h"/>
+                  {timeShareLimit.length > 0 ?  timeShareLimit.map(item =>
+                        <MenuItem value={item} primaryText={item +  "min"}/>
+                  ): null}
                 </SelectField>
                 
                 <SelectField
@@ -85,10 +97,9 @@ class  StreamVideoFormPage extends React.Component {
                   value={this.state.valueSharesAmount}
                   onChange={this.handleChangeValueSharesAmount}
                   fullWidth={true}>
-                        <MenuItem value={50} primaryText="50"/>
-                        <MenuItem value={100} primaryText="100"/>
-                        <MenuItem value={150} primaryText="150"/>
-                        <MenuItem value={200} primaryText="200"/>
+                  {sharesAmount.length > 0 ? sharesAmount.map(item =>
+                        <MenuItem value={item} primaryText={item}/>
+                  ): null}
                 </SelectField>
                 
 
@@ -125,4 +136,7 @@ class  StreamVideoFormPage extends React.Component {
  
 };
 
-export default StreamVideoFormPage;
+export default connect(
+  state => ({settings : state.entities.settings}),
+  { loadSettingsPage}
+)(StreamVideoFormPage)
