@@ -9,8 +9,9 @@ import {grey400} from 'material-ui/styles/colors';
 import Divider from 'material-ui/Divider';
 import PageBase from '../components/PageBase';
 import Checkbox from 'material-ui/Checkbox';
-import { loadSettingsPage} from '../actions'
+import { loadSettingsPage, callCreateStreamVideo} from '../actions'
 import { connect } from 'react-redux';
+
 
 const styles = {
     block: {
@@ -45,6 +46,7 @@ class  StreamVideoFormPage extends React.Component {
           valueCredit : 100,
           valueTimeShareLimit : 30,
           valueSharesAmount : 50,
+          url : ''
       };
     };
     
@@ -59,10 +61,14 @@ class  StreamVideoFormPage extends React.Component {
           };
         });
     };
+    handleChangeUrl = (event) =>this.setState({url : event.target.value})
     handleChangeCredit = (event, index, valueCredit) => this.setState({valueCredit});
     handleChangeTimeShareLimit =  (event, index, valueTimeShareLimit) => this.setState({valueTimeShareLimit});
     handleChangeValueSharesAmount =  (event, index, valueSharesAmount) => this.setState({valueSharesAmount});
+    handleCreate = () => {
+      this.props.callCreateStreamVideo({sharesAmount: this.state.valueSharesAmount, timeShareLimit : this.state.valueTimeShareLimit, url : this.state.url});
     
+    }
     
     render(){
         const {settings} = this.props;
@@ -80,6 +86,7 @@ class  StreamVideoFormPage extends React.Component {
                   hintText="Url live stream / Url profile live stream"
                   floatingLabelText="Url live stream / Url profile live stream"
                   fullWidth={true}
+                  onChange={this.handleChangeUrl}
                 />
                 
                  <SelectField
@@ -123,11 +130,12 @@ class  StreamVideoFormPage extends React.Component {
                   <Link to="/stream">
                     <RaisedButton label="Cancel"/>
                   </Link>
-        
-                  <RaisedButton label="Create"
-                                style={styles.saveButton}
-                                type="submit"
-                                primary={true}/>
+                  <Link to="/stream">
+                    <RaisedButton label="Create"
+                                  style={styles.saveButton}
+                                  onClick={this.handleCreate}
+                                  primary={true}/>
+                  </Link>
                   </div>
               </form>
             </PageBase>
@@ -138,5 +146,5 @@ class  StreamVideoFormPage extends React.Component {
 
 export default connect(
   state => ({settings : state.entities.settings}),
-  { loadSettingsPage}
+  { callCreateStreamVideo, loadSettingsPage}
 )(StreamVideoFormPage)

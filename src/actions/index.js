@@ -11,6 +11,8 @@ function createRequestTypes(base) {
 }
 
 export const GROUPS = createRequestTypes('GROUPS')
+export const OPENODES = createRequestTypes('OPENODES')
+export const CREATESTREAMVIDEO = 'CREATESTREAMVIDEO'
 export const CONTENTSHARE = createRequestTypes('CONTENTSHARE')
 export const UPDATECONTENTSHARE = createRequestTypes('UPDATECONTENTSHARE')
 export const SCHEDULEJOB = createRequestTypes('SCHEDULEJOB')
@@ -28,11 +30,17 @@ export const USER = createRequestTypes('USER')
 export const REPO = createRequestTypes('REPO')
 export const STARRED = createRequestTypes('STARRED')
 export const STARGAZERS = createRequestTypes('STARGAZERS')
+export const ADDOPENODE = createRequestTypes('ADDOPENODE')
+
 
 export const ADD_GROUPS = 'ADD_GROUPS'
+export const ADD_OPENODE = 'ADD_OPENODE'
+export const CREATE_STREAMVIDEO = 'CREATE_STREAMVIDEO'
 export const DELETE_GROUPS = 'DELETE_GROUPS'
+
 export const DELETE_CONTENTSHARE = 'DELETE_CONTENTSHARE'
 export const LOAD_GROUPS = 'LOAD_GROUPS'
+export const LOAD_OPENODES = 'LOAD_OPENODES'
 export const UPDATE_GROUP = 'UPDATE_GROUP'
 export const LOAD_ACCOUNTSFB = 'LOAD_ACCOUNTSFB'
 export const LOAD_CONTENTSHARE = 'LOAD_CONTENTSHARE'
@@ -64,6 +72,12 @@ export const settings = {
   request: () => action(SETTINGS[REQUEST]),
   success: (response) => action(SETTINGS[SUCCESS], { response}),
   failure: (error) => action(SETTINGS[FAILURE], {error}),
+}
+
+export const openodes = {
+  request: () => action(OPENODES[REQUEST]),
+  success: (response) => action(OPENODES[SUCCESS], { response}),
+  failure: (error) => action(OPENODES[FAILURE], {error}),
 }
 
 export const schedulejob = {
@@ -114,6 +128,22 @@ export const addAccountsFB = {
   success: (response) => action(ADDACCOUNTSFB[SUCCESS], { response}),
   failure: (error) => action(ADDACCOUNTSFB[FAILURE], {error}),
 }
+
+
+export const addOpenode = {
+  request: () => action(ADDOPENODE[REQUEST]),
+  success: (response) => action(ADDOPENODE[SUCCESS], { response}),
+  failure: (error) => action(ADDOPENODE[FAILURE], {error}),
+}
+
+
+export const createStreamVideo = {
+  request: () => action(CREATESTREAMVIDEO[REQUEST]),
+  success: (response) => action(CREATESTREAMVIDEO[SUCCESS], { response}),
+  failure: (error) => action(CREATESTREAMVIDEO[FAILURE], {error}),
+}
+
+
 
 export const addContentShare = {
   request: () => action(ADDCONTENTSHARE[REQUEST]),
@@ -172,8 +202,11 @@ export const stargazers = {
 }
 
 export const addGroup = data => action(ADD_GROUPS,{data} )
+export const callAddOpenode = data => action(ADD_OPENODE,{data} )
+export const callCreateStreamVideo = data => action(CREATE_STREAMVIDEO,{data} )
 export const deleteGroup = data => action(DELETE_GROUPS,{data} )
 export const loadGroup = data => action(LOAD_GROUPS,{data} )
+export const loadOpenodes = data => action(LOAD_OPENODES,{data} )
 export const updateGroup = data => action(UPDATE_GROUP, {data})
 export const loadAccountsFB = data => action(LOAD_ACCOUNTSFB,{data} )
 export const callDeleteAccountsFB = data => action(DELETE_ACCOUNTSFB,{data} )

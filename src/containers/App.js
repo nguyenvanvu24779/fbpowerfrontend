@@ -17,8 +17,12 @@ import { MessageList } from 'react-chat-elements'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
 import Badge from 'material-ui/Badge';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+
 var socketIOClient = require('socket.io-client');
 var sailsIOClient = require('sails.io.js');
+
 
 // Instantiate the socket client (`io`)
 // (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
@@ -46,7 +50,9 @@ class App extends React.Component {
       navDrawerOpen: false,
       chatShow : false,
       numNewMsg : 0,
-      dataSourceChat : []
+      dataSourceChat : [],
+      alertMsg : '',
+      open : false
     };
     
     // Send a GET request to `http://localhost:1337/hello`:
@@ -68,17 +74,23 @@ class App extends React.Component {
       // (note that there is no callback argument to the `.disconnect` method)
     });
     io.socket.on('message', (function (broadcastedData){
-       console.log(broadcastedData.msg);
-       var dataSourceChat = this.state.dataSourceChat;
-       if(dataSourceChat.length > 15) dataSourceChat.shift();
-       dataSourceChat.push({
-              position: 'left',
-              type: 'text',
-              text: broadcastedData.msg,
-              date: new Date(),
-        });
-       this.setState({dataSourceChat : dataSourceChat});
-       this.setState({numNewMsg : this.state.numNewMsg + 1});
+      
+       if(broadcastedData.msg){
+          console.log(broadcastedData.msg);
+          var dataSourceChat = this.state.dataSourceChat;
+          if(dataSourceChat.length > 15) dataSourceChat.shift();
+          dataSourceChat.push({
+                position: 'left',
+                type: 'text',
+                text: broadcastedData.msg,
+                date: new Date(),
+          });
+          this.setState({dataSourceChat : dataSourceChat});
+          this.setState({numNewMsg : this.state.numNewMsg + 1});
+       }
+       if(broadcastedData.alert){
+         this.setState({alertMsg : broadcastedData.alert, open : true })
+       }
        // => 'hi there!'
     }).bind(this));
   }
@@ -97,11 +109,23 @@ class App extends React.Component {
   handleOpenChat(){
     this.setState({chatShow : !this.state.chatShow, numNewMsg : 0})
   }
+  
+  handleClose  (){
+    this.setState({open : false})
+  } 
 
   render() {
     let { navDrawerOpen } = this.state;
     const paddingLeftDrawerOpen = 236;
-
+    const actions = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleClose.bind(this)}
+            />
+    ];
+        
     const styles = {
       header: {
         paddingLeft: navDrawerOpen ? paddingLeftDrawerOpen : 0
@@ -135,10 +159,20 @@ class App extends React.Component {
         <div>
           <Header styles={styles.header}
                   handleChangeRequestNavDrawer={this.handleChangeRequestNavDrawer.bind(this)}/>
-
+      
             <LeftDrawer navDrawerOpen={navDrawerOpen}
                         menus={Data.menus}
                         username="User Admin"/>
+            <Dialog
+                title="System Message"
+                actions={actions}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
+            >
+              {this.state.alertMsg}
+            </Dialog>
 
             <div style={styles.container}>
                  { this.state.chatShow ? <Card style={styles.cardChat}>

@@ -12,6 +12,7 @@ import SettingMngtPage from './containers/SettingMngtPage';
 import AccountFaceBookPage  from './containers/AccountFaceBookPage';
 import ScheduleJobPage  from './containers/ScheduleJobPage';
 import ContentShareManagementPage  from './containers/ContentShareManagementPage';
+import OpenodeManagementPage from './containers/OpenodeManagementPage'
 import Dashboard from './containers/DashboardPage';
 
 export default (
@@ -29,6 +30,7 @@ export default (
       <Route path="settingMngt" component={SettingMngtPage}/>
       <Route path="scheduleJob" component={ScheduleJobPage}/>
       <Route path="contentShareMngt" component={ContentShareManagementPage}/>
+      <Route path="nodeMngt" component={OpenodeManagementPage}/>
       <Route path="*" component={NotFoundPage}/>
     </Route>
   </Route>

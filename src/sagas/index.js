@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb , deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -37,8 +37,9 @@ export const callAddContentShare      = fetchEntity.bind(null,  addContentShare 
 export const fetchGetContentShare     = fetchEntity.bind(null,  contentShare ,api.fetchGetContentShare)
 export const callUpdateContentShare     = fetchEntity.bind(null,  updateContentShare ,api.updateContentShare)
 export const callDeleteContentShare       = fetchEntity.bind(null, deleteContentShare ,api.deleteContentShare)
-
-
+export const fetchOpenodes       = fetchEntity.bind(null, openodes ,api.fetchGetOpenodes)
+export const callAddOpenode       = fetchEntity.bind(null,  addOpenode ,api.addOpenode)
+export const callCreateStreamVideo       = fetchEntity.bind(null,  createStreamVideo ,api.createLiveStream);
 
 
 function* callAddGroup(typeAdd, ids) {
@@ -91,6 +92,28 @@ function* watchAddAccountsFB(){
     const {data} = yield take(actions.ADD_ACCOUNTSFB)
     console.log('[sagas] watchAddAccountsFB');
     yield call(callAddAccountsFB, data)
+  }
+  
+}
+
+
+
+function* watchAddOpenode(){
+  while(true){
+    const {data} = yield take(actions.ADD_OPENODE)
+    console.log('[sagas] watchAddOpenode');
+    yield call(callAddOpenode, data)
+    yield call(fetchOpenodes, {page : 1, per_page : 20})
+  }
+  
+}
+
+
+function* watchCreateStreamVideo(){
+  while(true){
+    const {data} = yield take(actions.CREATE_STREAMVIDEO)
+    console.log('[sagas] watchCreateStreamVideo');
+    yield call(callCreateStreamVideo, data)
   }
   
 }
@@ -189,6 +212,15 @@ function* watchGetAccountsFB() {
   }
 }
 
+function* watchGetOpenodes() {
+  console.log('[sagas] watchGetOpenodes');
+  while(true){
+    const {data} = yield take(actions.LOAD_OPENODES)
+    console.log(data)
+    yield fork(fetchOpenodes, data)
+  }
+}
+
 function* watchCallAddContentShare() {
   console.log('[sagas] watchCallAddContentShare');
   while(true){
@@ -236,6 +268,9 @@ export default function* root() {
     fork(watchCallAddContentShare),
     fork(watchLoadContentShare),
     fork(watchUpdateContentShare),
-    fork(watchDeleteContentShare)
+    fork(watchDeleteContentShare),
+    fork(watchGetOpenodes),
+    fork(watchAddOpenode),
+    fork(watchCreateStreamVideo),
   ])
 }

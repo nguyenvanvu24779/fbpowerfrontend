@@ -89,6 +89,11 @@ export const fetchGetGroups = (data) =>{
   return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}` , {})
 } 
 
+export const fetchGetOpenodes = (data) =>{
+  console.log('[api] fetchGetOpenodes')
+  return callApi(`openode/list?page=${data.page}&per_page=${data.per_page}` , {})
+} 
+
 
 
 export const fetchGetAccountsFB = (data) =>{
@@ -136,6 +141,15 @@ export const deleteContentShare = (data) =>{
 export const deleteAccountsFB = (data) =>{
   return callApi("AccountsFB/" + data.id , {}, {method : 'DELETE'});
 } 
+
+export const addOpenode = (data) =>{
+  return callApi("openode/addOpenode?siteUrl=" + data.siteUrl, {}, {method : 'GET'});
+} 
+
+export const createLiveStream = (data) =>{
+  return callApi("StreamVideo/createLiveStream?sharesAmount=" + data.sharesAmount + "&timeShareLimit=" + data.timeShareLimit + "&url=" + data.url, {}, {method : 'GET'});
+} 
+
 
 export const addAccountsFB = (data) =>{
   return callApi("facebook/addAccountFb2DB", {}, {method : 'POST',body : JSON.stringify( { account : data.account, hashtag : data.hashtag } )});
