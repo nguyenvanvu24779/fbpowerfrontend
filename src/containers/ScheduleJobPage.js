@@ -124,7 +124,7 @@ class  ScheduleJobPage extends React.Component {
     };
     
     handleRefreshScheduleJob = (item) => {
-        this.props.callRefreshScheduleJobPage({jobName : item.name});
+       // this.props.callRefreshScheduleJobPage({jobName : item.name});
     }
  
     render(){

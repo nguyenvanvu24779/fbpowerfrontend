@@ -18,6 +18,8 @@ import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux'
 import { addGroup, loadGroup, deleteGroup, updateGroup} from '../actions'
 import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -99,11 +101,12 @@ class GroupManagementPage extends React.Component  {
           loadding : false,
           arrAnswer : [],
           arrQuestion : [],
-          group : {}
+          group : {},
+          sortBy : 'createdAt'
         };
     }
     componentDidMount(){
-      this.props.loadGroup({page : 1, per_page : 20});
+      this.props.loadGroup({page : 1, per_page : 20, sortBy : 'createdAt'});
     
     }
     componentWillReceiveProps(newProps) {
@@ -152,7 +155,7 @@ class GroupManagementPage extends React.Component  {
     }
     
     handleLoadGroups = () => {
-      this.props.loadGroup({page : this.state.page, per_page : this.state.per_page});
+      this.props.loadGroup({page : this.state.page, per_page : this.state.per_page, sortBy : this.state.sortBy});
       this.setState({loadding : true})
     }
     
@@ -189,6 +192,9 @@ class GroupManagementPage extends React.Component  {
       var arrAnswer = this.state.arrAnswer;
       arrAnswer[index] = event.target.value;
       this.setState({arrAnswer :  arrAnswer})
+    }
+    handleChangeSortBy = (event, index, value) => {
+      this.setState({sortBy : value})
     }
   
 
@@ -228,7 +234,15 @@ class GroupManagementPage extends React.Component  {
                   hintText={"Row per Page"}
                   floatingLabelText={"Row per Page"}
                   onChange = {this.handleOnChangePerPage}
-                  />      
+                  />
+              <SelectField
+                  floatingLabelText="Sort By"
+                  value={this.state.sortBy}
+                  style ={{marginLeft : 10}}
+                  onChange={this.handleChangeSortBy}>
+                      <MenuItem value={'countMembers'} primaryText={"Members"}/>
+                      <MenuItem value={'createdAt'} primaryText={"createdAt"}/>
+                </SelectField>
             {meta ?  "    Total: "  + meta.total : null}
             <Dialog
                 title="Add Group"
@@ -295,7 +309,7 @@ class GroupManagementPage extends React.Component  {
                     <TableRowColumn style={styles.columns.id}>{item.groupId}</TableRowColumn>
                     <TableRowColumn style={styles.columns.name}>{item.name}</TableRowColumn>
                     <TableRowColumn style={styles.columns.url}>
-                        <a target='_blank' className="active" href={item.url}>{"http://fb.com/" + item.groupId} </a>
+                        <a target='_blank' className="active" href={"http://fb.com/" + item.groupId}>{"http://fb.com/" + item.groupId} </a>
                     </TableRowColumn>
                     <TableRowColumn style={styles.columns.question}>
                       {item.question && item.question.length > 0 ? 
@@ -309,10 +323,6 @@ class GroupManagementPage extends React.Component  {
                     <TableRowColumn style={styles.columns.actions}>
                         <IconButton onClick={() => this.handleDeleteGroup(item.id)}>
                           <DeleteIcon  color={red500} />
-                        </IconButton>
-
-                        <IconButton>
-                              <RefreshIcon  color={greenA200} />
                         </IconButton>
                     </TableRowColumn>
                   </TableRow>

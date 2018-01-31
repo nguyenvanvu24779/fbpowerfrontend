@@ -71,7 +71,7 @@ function* watchDeleteGroups(){
     const {data} = yield take(actions.DELETE_GROUPS)
     console.log('[sagas] watchDeleteGroups');
     yield call(callDeleteGroup, data)
-    yield call(fetchGroups, {page : 1, per_page : 20})
+    yield call(fetchGroups, {page : 1, per_page : 20, sortBy : 'createdAt'})
   }
   
 }
