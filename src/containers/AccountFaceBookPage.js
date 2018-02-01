@@ -156,7 +156,7 @@ class  AccountFaceBookPage extends React.Component {
     handleChangeCredit = (event, index, valueCredit) => this.setState({valueCredit});
     
     handleOpenAddAccount = () =>{
-      this.setState({openAddAccount : true})
+    //  this.setState({openAddAccount : true})
     };
     handleCloseAddAccount = () => {
       this.setState({openAddAccount : false})

@@ -2,7 +2,7 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo, streamvideo} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -40,6 +40,9 @@ export const callDeleteContentShare       = fetchEntity.bind(null, deleteContent
 export const fetchOpenodes       = fetchEntity.bind(null, openodes ,api.fetchGetOpenodes)
 export const callAddOpenode       = fetchEntity.bind(null,  addOpenode ,api.addOpenode)
 export const callCreateStreamVideo       = fetchEntity.bind(null,  createStreamVideo ,api.createLiveStream);
+
+export const fetchStreamVideo       = fetchEntity.bind(null,  streamvideo ,api.fetchGetStreamVideo);
+
 
 
 function* callAddGroup(typeAdd, ids) {
@@ -177,6 +180,14 @@ function* watchGetSettings() {
   }
 }
 
+function* watchGetStreamVideo() {
+  console.log('[sagas] watchGetStreamVideo');
+  while(true){
+    const {data} = yield take(actions.LOAD_STREAMVIDEO)
+    yield fork(fetchStreamVideo, data)
+  }
+}
+
 function* watchGetScheduleJob() {
   console.log('[sagas] watchGetScheduleJob');
   while(true){
@@ -272,5 +283,6 @@ export default function* root() {
     fork(watchGetOpenodes),
     fork(watchAddOpenode),
     fork(watchCreateStreamVideo),
+    fork(watchGetStreamVideo),
   ])
 }

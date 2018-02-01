@@ -10,6 +10,7 @@ function createRequestTypes(base) {
 	}, {})
 }
 
+export const STREAMVIDEO = createRequestTypes('STREAMVIDEO')
 export const GROUPS = createRequestTypes('GROUPS')
 export const OPENODES = createRequestTypes('OPENODES')
 export const CREATESTREAMVIDEO = 'CREATESTREAMVIDEO'
@@ -40,6 +41,7 @@ export const DELETE_GROUPS = 'DELETE_GROUPS'
 
 export const DELETE_CONTENTSHARE = 'DELETE_CONTENTSHARE'
 export const LOAD_GROUPS = 'LOAD_GROUPS'
+export const LOAD_STREAMVIDEO = 'LOAD_STREAMVIDEO'
 export const LOAD_OPENODES = 'LOAD_OPENODES'
 export const UPDATE_GROUP = 'UPDATE_GROUP'
 export const LOAD_ACCOUNTSFB = 'LOAD_ACCOUNTSFB'
@@ -73,6 +75,15 @@ export const settings = {
   success: (response) => action(SETTINGS[SUCCESS], { response}),
   failure: (error) => action(SETTINGS[FAILURE], {error}),
 }
+
+
+export const streamvideo = {
+  request: () => action(STREAMVIDEO[REQUEST]),
+  success: (response) => action(STREAMVIDEO[SUCCESS], { response}),
+  failure: (error) => action(STREAMVIDEO[FAILURE], {error}),
+}
+
+
 
 export const openodes = {
   request: () => action(OPENODES[REQUEST]),
@@ -206,6 +217,7 @@ export const callAddOpenode = data => action(ADD_OPENODE,{data} )
 export const callCreateStreamVideo = data => action(CREATE_STREAMVIDEO,{data} )
 export const deleteGroup = data => action(DELETE_GROUPS,{data} )
 export const loadGroup = data => action(LOAD_GROUPS,{data} )
+export const loadStreamVideo = data => action(LOAD_STREAMVIDEO,{data} )
 export const loadOpenodes = data => action(LOAD_OPENODES,{data} )
 export const updateGroup = data => action(UPDATE_GROUP, {data})
 export const loadAccountsFB = data => action(LOAD_ACCOUNTSFB,{data} )

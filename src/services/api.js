@@ -89,6 +89,11 @@ export const fetchGetGroups = (data) =>{
   return callApi(`groups/list?page=${data.page}&per_page=${data.per_page}&sortBy=${data.sortBy}` , {})
 } 
 
+export const fetchGetStreamVideo = (data) =>{
+  console.log('[api] fetchGetStreamVideo')
+  return callApi(`streamvideo/list?page=${data.page}&per_page=${data.per_page}&sortBy=${data.sortBy}` , {})
+} 
+
 export const fetchGetOpenodes = (data) =>{
   console.log('[api] fetchGetOpenodes')
   return callApi(`openode/list?page=${data.page}&per_page=${data.per_page}` , {})
@@ -125,6 +130,7 @@ export const defaultSettings = () =>{
   callApi("settings/create?key=sharesAmount&value=[50,100,150,200,250]" , {}, {method : 'GET'});
   callApi("settings/create?key=maxGroupPerAccount&value=200" , {}, {method : 'GET'});
   callApi("settings/create?key=timeJoinGroupPerAccount&value=[1,1]" , {}, {method : 'GET'});
+  callApi("settings/create?key=maxAccountSysPerGroup&value=10" , {}, {method : 'GET'});
   return callApi("settings/create?key=account_global&value={}", {}, {method : 'GET'});
 } 
 

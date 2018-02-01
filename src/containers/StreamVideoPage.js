@@ -16,6 +16,9 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import { connect } from 'react-redux'
+import { loadStreamVideo} from '../actions'
+
 
 const LiveTvIcon = (props) => (
   <SvgIcon {...props}>
@@ -125,12 +128,17 @@ class StreamVideoPage extends React.Component {
       open: false,
       openAddShareAmount :  false,
       valueCredit : 100,
+      shareDetail : []
     };
-  };
+  }
+  
+  componentDidMount(){
+      this.props.loadStreamVideo({page : 1, per_page : 20, sortBy : 'createdAt'});
+  }
   
 
-  handleOpen = () => {
-    this.setState({open: true});
+  handleOpen = (item) => {
+    this.setState({open: true, shareDetail : item.ShareDetail});
   };
 
    handleClose = () => {
@@ -170,6 +178,10 @@ class StreamVideoPage extends React.Component {
           onClick={this.handleCloseAddShareAmount}
         />
     ];
+    
+    const {streamvideo} = this.props;
+    const shareDetail  = this.state.shareDetail;
+    
   return (
       <PageBase title="Stream Video Page"
                 navigation="Application / Stream Video Page">
@@ -184,10 +196,10 @@ class StreamVideoPage extends React.Component {
           >
              <List>
               <Subheader>List</Subheader>
-              {Data.groupShare.items.map(item =>
+              {shareDetail && shareDetail.length > 0 ? shareDetail.map(item =>
                 <div>
                   <ListItem
-                    primaryText={<a target="_blank" href={"https://facebook.com/" + item.id}>{item.story}</a>}
+                    primaryText={<a target="_blank" href={item.link}>{item.from}</a>}
                     secondaryText={
                       <div>
                         <p>
@@ -199,7 +211,7 @@ class StreamVideoPage extends React.Component {
                   />
                   <Divider inset={true} />
                 </div>
-              )}
+              ): null}
               </List>
           </Dialog>
           <Dialog
@@ -228,7 +240,7 @@ class StreamVideoPage extends React.Component {
   
           <Table>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-              <TableRow>
+              <TableRow >
                 <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.url}>URL</TableHeaderColumn>
                 <TableHeaderColumn style={styles.columns.credit}>Credit</TableHeaderColumn>
@@ -241,10 +253,10 @@ class StreamVideoPage extends React.Component {
               </TableRow>
             </TableHeader>
             <TableBody  displayRowCheckbox={0}>
-              {Data.streamVideoPage.items.map(item =>
+              {streamvideo && streamvideo.length > 0 ? streamvideo.map(item =>
                 <TableRow key={item.id}>
                   <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
-                  <TableRowColumn style={styles.columns.url}><a target="_blank" href = {item.url}>{item.url}</a></TableRowColumn>
+                  <TableRowColumn style={styles.columns.url}><a target="_blank" href = {item.videoId ? item.url + '/' + item.videoId : item.url}>{item.videoId ? item.url + '/' + item.videoId : item.url }</a></TableRowColumn>
                   <TableRowColumn style={styles.columns.credit}>{item.credit}</TableRowColumn>
                   <TableRowColumn style={styles.columns.addCredit}>
                     <IconButton>
@@ -254,7 +266,7 @@ class StreamVideoPage extends React.Component {
                   <TableRowColumn style={styles.columns.share}>{item.botShare}/{item.share}</TableRowColumn>
                   <TableRowColumn style={styles.columns.botshare}>
                      <IconButton>
-                      <MoreIcon  color={greenA200} onClick={this.handleOpen}/>
+                      <MoreIcon  color={greenA200} onClick={() => this.handleOpen(item)}/>
                     </IconButton>
                   </TableRowColumn>
                   <TableRowColumn style={styles.columns.live}>
@@ -271,7 +283,7 @@ class StreamVideoPage extends React.Component {
                   </TableRowColumn>
                 </TableRow>
                 
-              )}
+              ) : null}
             </TableBody>
           </Table>    
         </div>
@@ -280,4 +292,9 @@ class StreamVideoPage extends React.Component {
   }
 };
 
-export default StreamVideoPage;
+export default connect(
+  state => ({streamvideo : state.entities.streamvideo, meta : state.entities.meta}),
+  { loadStreamVideo}
+)(StreamVideoPage)
+
+

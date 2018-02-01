@@ -159,7 +159,7 @@ class OpenodeManagementPage extends React.Component  {
       });
     }
     handleDeleteOpenode = (id) => {
-      //this.props.deleteOpenode({id: id })
+      this.props.deleteOpenode({id: id })
     }
  
 

@@ -30,6 +30,10 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       if(state) state.openodes = {};
       return merge({}, state, {openodes : action.response.data , meta : action.response.meta})
   }
+  if(action.type == "STREAMVIDEO_SUCCESS" &&  action.response ){
+      if(state) state.streamvideo = {};
+      return merge({}, state, {streamvideo : action.response.data , meta : action.response.meta})
+  }
   if(action.type == "ACCOUNTSFB_SUCCESS" &&  action.response ){
       if(state) state.accountsfb = {};
       return merge({}, state, {accountsfb : action.response.data , meta : action.response.meta})

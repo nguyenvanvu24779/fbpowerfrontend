@@ -284,6 +284,7 @@ class GroupManagementPage extends React.Component  {
                 <Menu>
                     <MenuItem onClick={ () => this.handleOpenAddGroup(0)} primaryText="by Group ID" />
                     <MenuItem onClick={ () => this.handleOpenAddGroup(1)} primaryText="by Video ID" />
+                    <MenuItem onClick={ () => this.handleOpenAddGroup(2)} primaryText="add Hashtag" />
                 </Menu>
             </Popover>
             <FloatingActionButton onClick={this.handleTouchTap} style={styles.floatingActionButton} backgroundColor={pink500}>
@@ -318,7 +319,7 @@ class GroupManagementPage extends React.Component  {
                         'None'}
                     </TableRowColumn>
                     <TableHeaderColumn style={styles.columns.members}>{item.countMembers}</TableHeaderColumn>
-                    <TableRowColumn style={styles.columns.botInGroup}>{item.botsInGroup}</TableRowColumn>
+                    <TableRowColumn style={styles.columns.botInGroup}>{item.countMemberSystem}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botShare}>{item.botShares}</TableRowColumn>
                     <TableRowColumn style={styles.columns.actions}>
                         <IconButton onClick={() => this.handleDeleteGroup(item.id)}>

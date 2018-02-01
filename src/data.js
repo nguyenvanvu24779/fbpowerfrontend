@@ -3,6 +3,11 @@ import Assessment from 'material-ui/svg-icons/action/assessment';
 import GridOn from 'material-ui/svg-icons/image/grid-on';
 import PermIdentity from 'material-ui/svg-icons/action/perm-identity';
 import Web from 'material-ui/svg-icons/av/web';
+import VideoLibrary from 'material-ui/svg-icons/av/video-library';
+import AccountBox from 'material-ui/svg-icons/action/account-box';
+import GroupWork from 'material-ui/svg-icons/action/group-work';
+import SettingBrightness from 'material-ui/svg-icons/action/settings-brightness';
+import Schedule from 'material-ui/svg-icons/action/schedule';
 import {cyan600, pink600, purple600} from 'material-ui/styles/colors';
 import ExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import ExpandMore from 'material-ui/svg-icons/navigation/expand-more';
@@ -14,14 +19,14 @@ const data = {
     //{ text: 'Form Page', icon: <Web/>, link: '/form' },
     //{ text: 'Table Page', icon: <GridOn/>, link: '/table' },
     { text: 'Login Page', icon: <PermIdentity/>, link: '/login' },
-    { text: 'Stream Video', icon: <Web/>, link: '/stream' },
-    //{ text: 'Stream Video Form', icon: <Web/>, link: '/streamVideoForm' },
-    { text: 'Group Mngt', icon: <Web/>, link: '/groupMngt' },
-    { text: 'Setting Mngt', icon: <Web/>, link: '/settingMngt' },
-    { text: 'Account FB Mngt', icon: <Web/>, link: '/accountFbMngt' },
-    { text: 'Schedule Job', icon: <Web/>, link: '/scheduleJob' },
-    { text: 'Node Mngt', icon: <Web/>, link: '/nodeMngt' },
+    { text: 'Stream Video', icon: <VideoLibrary/>, link: '/stream' },
     { text: 'Content Share Mngt', icon: <Web/>, link: '/contentShareMngt' },
+    { text: 'Account FB Mngt', icon: <AccountBox/>, link: '/accountFbMngt' },
+    { text: 'Group Mngt', icon: <GroupWork/>, link: '/groupMngt' },
+    { text: 'Setting Mngt', icon: <SettingBrightness/>, link: '/settingMngt' },
+    { text: 'Schedule Job', icon: <Schedule/>, link: '/scheduleJob' },
+    { text: 'Node Mngt', icon: <Web/>, link: '/nodeMngt' },
+   
   ],
   tablePage: {
     items: [
