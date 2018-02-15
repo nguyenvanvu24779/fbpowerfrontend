@@ -11,6 +11,9 @@ function createRequestTypes(base) {
 }
 
 export const STREAMVIDEO = createRequestTypes('STREAMVIDEO')
+export const ADDHASHTAG = createRequestTypes('ADDHASHTAG')
+export const HASHTAG = createRequestTypes('HASHTAG')
+export const GROUPHASHTAG = createRequestTypes('GROUPHASHTAG')
 export const GROUPS = createRequestTypes('GROUPS')
 export const OPENODES = createRequestTypes('OPENODES')
 export const CREATESTREAMVIDEO = 'CREATESTREAMVIDEO'
@@ -35,6 +38,10 @@ export const ADDOPENODE = createRequestTypes('ADDOPENODE')
 
 
 export const ADD_GROUPS = 'ADD_GROUPS'
+export const ADD_HASHTAG = 'ADD_HASHTAG'
+export const REMOVE_GROUPHASHTAG = 'REMOVE_GROUPHASHTAG'
+export const ADD_GROUPHASHTAG = 'ADD_GROUPHASHTAG'
+export const LOAD_HASHTAG = 'LOAD_HASHTAG'
 export const ADD_OPENODE = 'ADD_OPENODE'
 export const CREATE_STREAMVIDEO = 'CREATE_STREAMVIDEO'
 export const DELETE_GROUPS = 'DELETE_GROUPS'
@@ -75,6 +82,27 @@ export const settings = {
   success: (response) => action(SETTINGS[SUCCESS], { response}),
   failure: (error) => action(SETTINGS[FAILURE], {error}),
 }
+
+export const hashtag = {
+  request: () => action(HASHTAG[REQUEST]),
+  success: (response) => action(HASHTAG[SUCCESS], { response}),
+  failure: (error) => action(HASHTAG[FAILURE], {error}),
+}
+
+
+export const grouphashtag = {
+  request: () => action(GROUPHASHTAG[REQUEST]),
+  success: (response) => action(GROUPHASHTAG[SUCCESS], { response}),
+  failure: (error) => action(GROUPHASHTAG[FAILURE], {error}),
+}
+
+
+export const addHashtag = {
+  request: () => action(ADDHASHTAG[REQUEST]),
+  success: (response) => action(ADDHASHTAG[SUCCESS], { response}),
+  failure: (error) => action(ADDHASHTAG[FAILURE], {error}),
+}
+
 
 
 export const streamvideo = {
@@ -213,10 +241,14 @@ export const stargazers = {
 }
 
 export const addGroup = data => action(ADD_GROUPS,{data} )
+export const callAddHashtag = data => action(ADD_HASHTAG,{data} )
 export const callAddOpenode = data => action(ADD_OPENODE,{data} )
 export const callCreateStreamVideo = data => action(CREATE_STREAMVIDEO,{data} )
 export const deleteGroup = data => action(DELETE_GROUPS,{data} )
 export const loadGroup = data => action(LOAD_GROUPS,{data} )
+export const loadHashtag = data => action(LOAD_HASHTAG,{data} )
+export const callAddGroupHashtag = data => action(ADD_GROUPHASHTAG,{data} )
+export const callRemoveGroupHashtag = data => action(REMOVE_GROUPHASHTAG,{data} )
 export const loadStreamVideo = data => action(LOAD_STREAMVIDEO,{data} )
 export const loadOpenodes = data => action(LOAD_OPENODES,{data} )
 export const updateGroup = data => action(UPDATE_GROUP, {data})

@@ -2,7 +2,11 @@
 import { take, put, call, fork, select, takeEvery, all  } from 'redux-saga/effects'
 import * as actions from '../actions'
 import { api } from '../services'
-const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo, streamvideo} = actions
+const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo, streamvideo,
+    addHashtag,
+    hashtag,
+    grouphashtag
+} = actions
 
 /***************************** Subroutines ************************************/
 
@@ -42,6 +46,11 @@ export const callAddOpenode       = fetchEntity.bind(null,  addOpenode ,api.addO
 export const callCreateStreamVideo       = fetchEntity.bind(null,  createStreamVideo ,api.createLiveStream);
 
 export const fetchStreamVideo       = fetchEntity.bind(null,  streamvideo ,api.fetchGetStreamVideo);
+export const callAddHashtag = fetchEntity.bind(null,  addHashtag ,api.callAddHashtag);
+export const fetchGetHashtags = fetchEntity.bind(null,  hashtag ,api.fetchGetHashtags);
+export const callAddGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.addGroupHashtag);
+export const callRemoveGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.removeGroupHashtag);
+
 
 
 
@@ -107,6 +116,15 @@ function* watchAddOpenode(){
     console.log('[sagas] watchAddOpenode');
     yield call(callAddOpenode, data)
     yield call(fetchOpenodes, {page : 1, per_page : 20})
+  }
+  
+}
+function* watchAddHashtag(){
+  while(true){
+    const {data} = yield take(actions.ADD_HASHTAG)
+    console.log('[sagas] watchAddHashtag');
+    yield call(callAddHashtag, data)
+    yield fork(fetchGetHashtags)
   }
   
 }
@@ -177,6 +195,30 @@ function* watchGetSettings() {
   while(true){
     yield take(actions.LOAD_SETTINGS_PAGE)
     yield fork(callGetSettings, settings)
+  }
+}
+
+function* watchGetHashtag() {
+  console.log('[sagas] watchGetHashtag');
+  while(true){
+    const {data} = yield take(actions.LOAD_HASHTAG)
+    yield fork(fetchGetHashtags, data)
+  }
+}
+
+function* watchAddGroupHashtag() {
+  console.log('[sagas] watchAddGroupHashtag');
+  while(true){
+    const {data} = yield take(actions.ADD_GROUPHASHTAG)
+    yield fork(callAddGroupHashtag, data)
+  }
+}
+
+function* watchRemoveGroupHashtag() {
+  console.log('[sagas] watchRemoveGroupHashtag');
+  while(true){
+    const {data} = yield take(actions.REMOVE_GROUPHASHTAG)
+    yield fork(callRemoveGroupHashtag, data)
   }
 }
 
@@ -284,5 +326,9 @@ export default function* root() {
     fork(watchAddOpenode),
     fork(watchCreateStreamVideo),
     fork(watchGetStreamVideo),
+    fork(watchAddHashtag),
+    fork(watchGetHashtag),
+    fork(watchAddGroupHashtag),
+    fork(watchRemoveGroupHashtag)
   ])
 }

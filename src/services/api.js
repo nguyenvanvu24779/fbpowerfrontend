@@ -68,10 +68,19 @@ export const fetchAddGroup = (typeAdd, ids) => {
 } 
 
 
+export const callAddHashtag = (data) => {
+  return callApi(`hashtag/create?hashtag=${data.hashtag}`, {})
+} 
+
 
 export const fetchGetSettings = () =>{
   console.log('[api] fetchGetSettings')
   return callApi(`settings`, {})
+} 
+
+export const fetchGetHashtags = () =>{
+  console.log('[api] fetchGetHashtags')
+  return callApi(`hashtag/list?page=1&per_page=1000`, {})
 } 
 
 export const fetchScheduleJob = () =>{
@@ -118,6 +127,13 @@ export const updateContentShare = (data) =>{
 
 export const updateSettings = (data) =>{
   return callApi("settings/"+ data.id + "?value=" + data.value , {}, {method : 'PUT'})
+} 
+
+export const addGroupHashtag = (data) =>{
+  return callApi("groups/addGroupHashtag?groupId="+ data.groupId + "&hashtagId=" + data.hashtagId , {}, {method : 'GET'})
+} 
+export const removeGroupHashtag = (data) =>{
+  return callApi("groups/removeGroupHashtag?groupId="+ data.groupId + "&hashtagId=" + data.hashtagId , {}, {method : 'GET'})
 } 
 
 export const defaultSettings = () =>{

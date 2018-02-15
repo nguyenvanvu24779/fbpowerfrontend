@@ -16,9 +16,11 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux'
-import { addGroup, loadGroup, deleteGroup, updateGroup} from '../actions'
+import { addGroup, loadGroup, deleteGroup, updateGroup, callAddHashtag, loadHashtag,callAddGroupHashtag, callRemoveGroupHashtag} from '../actions'
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
+import Divider from 'material-ui/Divider';
+import Checkbox from 'material-ui/Checkbox';
 
 
 const DeleteIcon = (props) => (
@@ -32,6 +34,13 @@ const RefreshIcon = (props) => (
   <SvgIcon {...props}>
     <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
     <path d="M0 0h24v24H0z" fill="none"/>
+  </SvgIcon>
+);
+
+const HashtagIcon = (props) => (
+  <SvgIcon {...props}>
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>
   </SvgIcon>
 );
 
@@ -94,6 +103,8 @@ class GroupManagementPage extends React.Component  {
           open: false,
           openAddGroup : false,
           openAnswer : false,
+          openHashtag : false,
+          openAddGroupHashtag : false,
           typeAdd : 0, // 0 - group id, 1 - video id,
           ids : [],
           page : 1,
@@ -102,11 +113,13 @@ class GroupManagementPage extends React.Component  {
           arrAnswer : [],
           arrQuestion : [],
           group : {},
-          sortBy : 'createdAt'
+          sortBy : 'createdAt',
+          hashtagText : '',
+          groupHashtag : null
         };
     }
     componentDidMount(){
-      this.props.loadGroup({page : 1, per_page : 20, sortBy : 'createdAt'});
+      this.props.loadGroup({page : this.state.page, per_page : this.state.per_page, sortBy : this.state.sortBy});
     
     }
     componentWillReceiveProps(newProps) {
@@ -137,6 +150,11 @@ class GroupManagementPage extends React.Component  {
         this.handleRequestClose();
         this.setState({openAddGroup: true});
     };
+    
+    handleOpenHashtag = () => {
+      this.setState({openHashtag : true});
+      this.props.loadHashtag();
+    }
     
     handleCloseAddGroup = () => {
         this.setState({openAddGroup: false});
@@ -196,10 +214,48 @@ class GroupManagementPage extends React.Component  {
     handleChangeSortBy = (event, index, value) => {
       this.setState({sortBy : value})
     }
-  
+    
+    handleCloseHashtag =() =>{
+      this.setState({openHashtag : false});
+    }
+    
+    handleOnChangeHashtag = (event) => {
+      this.setState({hashtagText : event.target.value});
+    }
+    
+    handleCallAddHashtag = () => {
+      this.props.callAddHashtag({hashtag : this.state.hashtagText});
+    }
+    handleCloseGroupHashtag = () => {
+      this.setState({openAddGroupHashtag : false})
+      this.props.loadGroup({page : this.state.page, per_page : this.state.per_page, sortBy : this.state.sortBy});
+    }
+    handleOpenGroupHashtag = (item) => {
+      this.setState({openAddGroupHashtag : true, groupHashtag : item});
+      var groupHashtag = this.state.groupHashtag;
+      if(groupHashtag == null || groupHashtag.id != item.id  )
+        this.setState({ groupHashtag : item});
+      this.props.loadHashtag();
+    }
+    handleOnCheck = (item,event, isInputChecked) => {
+      if(!isInputChecked){
+        this.props.callAddGroupHashtag({groupId : this.state.groupHashtag.id, hashtagId : item.id});
+        var groupHashtag = this.state.groupHashtag;
+        groupHashtag.hashtag.push({id: item.id});
+        this.setState({groupHashtag : groupHashtag});
+      } else {
+        this.props.callRemoveGroupHashtag({groupId : this.state.groupHashtag.id, hashtagId : item.id});
 
+        // Remove item  from array
+        var groupHashtag = this.state.groupHashtag;
+        var filteredAry =  this.state.groupHashtag.hashtag.filter(function(e) { return e.id !== item.id });
+        groupHashtag.hashtag = filteredAry;
+        this.setState({groupHashtag : groupHashtag});
+      }
+    }
+  
     render(){
-      const {groups, meta} = this.props;
+      const {groups, meta, hashtags} = this.props;
       const {arrQuestion, group ,arrAnswer} = this.state;
       const actions = [
             <FlatButton
@@ -217,6 +273,28 @@ class GroupManagementPage extends React.Component  {
               onClick={this.handleCallAddAnswer.bind(this)}
             />
         ];  
+      const actionsHashtag = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCallAddHashtag.bind(this)}
+            />,
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCloseHashtag.bind(this)}
+            />
+        ];
+         const actionsGroupHashtag = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCloseGroupHashtag.bind(this)}
+            />
+        ];
     return (
         <PageBase title="Group Management Page"
                   navigation="Application / Group Management Page">
@@ -241,6 +319,7 @@ class GroupManagementPage extends React.Component  {
                   style ={{marginLeft : 10}}
                   onChange={this.handleChangeSortBy}>
                       <MenuItem value={'countMembers'} primaryText={"Members"}/>
+                      <MenuItem value={'countMemberSystem'} primaryText={"Accounts in Group	"}/>
                       <MenuItem value={'createdAt'} primaryText={"createdAt"}/>
                 </SelectField>
             {meta ?  "    Total: "  + meta.total : null}
@@ -274,6 +353,53 @@ class GroupManagementPage extends React.Component  {
                   </div>
                 )}    
             </Dialog>
+            
+            <Dialog
+                title="Hashtag"
+                actions={actionsHashtag}
+                modal={false}
+                open={this.state.openHashtag}
+                onRequestClose={this.handleCloseHashtag}
+                autoScrollBodyContent={true}
+            >
+              <TextField
+                  hintText={"BuyVsSell..."}
+                  floatingLabelText={"#Add Hashtag"}
+                  fullWidth={true}
+                  onChange={this.handleOnChangeHashtag}
+                />
+                {hashtags != null ? hashtags.map( (item, index) => 
+                  <div>
+                  {'#' + item.hashtag}
+                  <Divider />
+                  </div>
+                ) : null} 
+            </Dialog>
+            <Dialog
+                title={"Add Hashtag, group : " + ( this.state.groupHashtag ? this.state.groupHashtag.name : '' )}
+                actions={actionsGroupHashtag}
+                modal={false}
+               
+                open={this.state.openAddGroupHashtag}
+                onRequestClose={this.handleCloseGroupHashtag}
+                autoScrollBodyContent={true}
+            >
+                {hashtags != null ? hashtags.map( (item, index) => 
+                  <div>
+                   <Checkbox
+                    checked={
+                        this.state.groupHashtag.hashtag.find(function(ele){
+                                return ele.id == item.id
+                        }) ? true : false
+                    }
+                    labelPosition="left"
+                    label= {'#' + item.hashtag}
+                    onCheck={this.handleOnCheck.bind(this, item)}
+                  />
+                  <Divider />
+                  </div>
+                ) : null} 
+            </Dialog>
             <Popover
               open={this.state.open}
               anchorEl={this.state.anchorEl}
@@ -284,7 +410,7 @@ class GroupManagementPage extends React.Component  {
                 <Menu>
                     <MenuItem onClick={ () => this.handleOpenAddGroup(0)} primaryText="by Group ID" />
                     <MenuItem onClick={ () => this.handleOpenAddGroup(1)} primaryText="by Video ID" />
-                    <MenuItem onClick={ () => this.handleOpenAddGroup(2)} primaryText="add Hashtag" />
+                    <MenuItem onClick={ () => this.handleOpenHashtag()} primaryText="Hashtag" />
                 </Menu>
             </Popover>
             <FloatingActionButton onClick={this.handleTouchTap} style={styles.floatingActionButton} backgroundColor={pink500}>
@@ -322,9 +448,13 @@ class GroupManagementPage extends React.Component  {
                     <TableRowColumn style={styles.columns.botInGroup}>{item.countMemberSystem}</TableRowColumn>
                     <TableRowColumn style={styles.columns.botShare}>{item.botShares}</TableRowColumn>
                     <TableRowColumn style={styles.columns.actions}>
+                        <IconButton onClick={() => this.handleOpenGroupHashtag(item)}>
+                          <HashtagIcon  color={red500} />
+                        </IconButton>
                         <IconButton onClick={() => this.handleDeleteGroup(item.id)}>
                           <DeleteIcon  color={red500} />
                         </IconButton>
+                        
                     </TableRowColumn>
                   </TableRow>
                 ) : null}
@@ -341,6 +471,6 @@ GroupManagementPage.propTypes = {
 }
 
 export default connect(
-  state => ({groups : state.entities.groups, meta : state.entities.meta}),
-  { addGroup , loadGroup, deleteGroup, updateGroup}
+  state => ({groups : state.entities.groups, meta : state.entities.meta, hashtags : state.entities.hashtags }),
+  { addGroup , loadGroup, deleteGroup, updateGroup,callAddHashtag,loadHashtag, callAddGroupHashtag,callRemoveGroupHashtag}
 )(GroupManagementPage)
