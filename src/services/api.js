@@ -169,7 +169,7 @@ export const addOpenode = (data) =>{
 } 
 
 export const createLiveStream = (data) =>{
-  return callApi("StreamVideo/createLiveStream?sharesAmount=" + data.sharesAmount + "&timeShareLimit=" + data.timeShareLimit + "&url=" + data.url, {}, {method : 'GET'});
+  return callApi("StreamVideo/createLiveStream?sharesAmount=" + data.sharesAmount + "&timeShareLimit=" + data.timeShareLimit + "&url=" + data.url + '&note=' + data.note, {}, {method : 'GET'});
 } 
 
 

@@ -11,7 +11,9 @@ import PageBase from '../components/PageBase';
 import Checkbox from 'material-ui/Checkbox';
 import { loadSettingsPage, callCreateStreamVideo} from '../actions'
 import { connect } from 'react-redux';
-
+import {browserHistory} from "react-router";
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
     block: {
@@ -43,10 +45,13 @@ class  StreamVideoFormPage extends React.Component {
       super(props);
       this.state = {
           checked: false,
-          valueCredit : 100,
-          valueTimeShareLimit : 30,
-          valueSharesAmount : 50,
-          url : ''
+          valueCredit : 0,
+          valueTimeShareLimit : 0,
+          valueSharesAmount : 0,
+          url : '',
+          errorTextUrl : "",
+          openComfirmOrder : false,
+          note : '',
       };
     };
     
@@ -66,27 +71,87 @@ class  StreamVideoFormPage extends React.Component {
     handleChangeTimeShareLimit =  (event, index, valueTimeShareLimit) => this.setState({valueTimeShareLimit});
     handleChangeValueSharesAmount =  (event, index, valueSharesAmount) => this.setState({valueSharesAmount});
     handleCreate = () => {
-      this.props.callCreateStreamVideo({sharesAmount: this.state.valueSharesAmount, timeShareLimit : this.state.valueTimeShareLimit, url : this.state.url});
+       
+      if(!this.state.url.includes('https://www.facebook.com/')){
+        return this.setState({errorTextUrl : 'error url!'})
+      } 
+      this.setState({openComfirmOrder : true})
+      this.setState({errorTextUrl : ''})
+     
+    }
     
+    handleCloseComfirmOrder = () => {
+      this.setState({openComfirmOrder : false})
+    }
+    
+    handleComfirmOrder = () => {
+      this.props.callCreateStreamVideo({sharesAmount: this.state.valueSharesAmount, timeShareLimit : this.state.valueTimeShareLimit, url : this.state.url, note : this.state.note});
+      return browserHistory.goBack();
+    }
+    
+    handleChangeNote = (event) => {
+      this.setState({note : event.target.value})
     }
     
     render(){
         const {settings} = this.props;
+        
         var timeShareLimit = [];
         var sharesAmount = [];
         for (var i = 0; i < settings.length; i++) {
           if(settings[i].key == 'timeShareLimit') timeShareLimit  =  JSON.parse(settings[i].value);
           if(settings[i].key == 'sharesAmount')   sharesAmount    =  JSON.parse(settings[i].value);
         }
+        if(timeShareLimit.length > 0 && this.state.valueTimeShareLimit == 0){
+          this.setState({valueTimeShareLimit : timeShareLimit[0]});
+        }
+         if(sharesAmount.length > 0 && this.state.valueSharesAmount == 0){
+          this.setState({valueSharesAmount : sharesAmount[0]});
+        }
+         const actionsComfirmOrder = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleComfirmOrder.bind(this)}
+            />,
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              keyboardFocused={true}
+              onClick={this.handleCloseComfirmOrder.bind(this)}
+            />,
+        ];
          return (
             <PageBase title="Stream Video Order Form"
                       navigation="Application / Stream Video Order Form">
+                       
+            <Dialog
+                title="Comfirm Order"
+                actions={actionsComfirmOrder}
+                modal={false}
+                open={this.state.openComfirmOrder}
+                onRequestClose={this.handleCloseComfirmOrder}
+                autoScrollBodyContent={true}
+            >
+            <div>
+              Url : {this.state.url}
+              <br/>
+              Time Share Limit : {this.state.valueTimeShareLimit}
+              <br/>
+              Shares Amount : {this.state.valueSharesAmount}
+              <Divider/>
+              Credit : 100
+              
+            </div> 
+            </Dialog>
               <form>
                 <TextField
                   hintText="Url live stream / Url profile live stream"
                   floatingLabelText="Url live stream / Url profile live stream"
                   fullWidth={true}
                   onChange={this.handleChangeUrl}
+                  errorText={this.state.errorTextUrl}
                 />
                 
                  <SelectField
@@ -122,6 +187,7 @@ class  StreamVideoFormPage extends React.Component {
                   multiLine={true}
                   rows={2}
                   fullWidth={true}
+                  onChange={this.handleChangeNote}
                 /><br />
         
                 <Divider/>
@@ -130,12 +196,12 @@ class  StreamVideoFormPage extends React.Component {
                   <Link to="/stream">
                     <RaisedButton label="Cancel"/>
                   </Link>
-                  <Link to="/stream">
+                  
                     <RaisedButton label="Create"
                                   style={styles.saveButton}
-                                  onClick={this.handleCreate}
+                                  onClick={this.handleCreate.bind(this)}
                                   primary={true}/>
-                  </Link>
+                  
                   </div>
               </form>
             </PageBase>

@@ -232,9 +232,7 @@ class GroupManagementPage extends React.Component  {
     }
     handleOpenGroupHashtag = (item) => {
       this.setState({openAddGroupHashtag : true, groupHashtag : item});
-      var groupHashtag = this.state.groupHashtag;
-      if(groupHashtag == null || groupHashtag.id != item.id  )
-        this.setState({ groupHashtag : item});
+      this.setState({ groupHashtag : item});
       this.props.loadHashtag();
     }
     handleOnCheck = (item,event, isInputChecked) => {
@@ -388,9 +386,9 @@ class GroupManagementPage extends React.Component  {
                   <div>
                    <Checkbox
                     checked={
-                        this.state.groupHashtag.hashtag.find(function(ele){
+                        this.state.groupHashtag ? (this.state.groupHashtag.hashtag.find(function(ele){
                                 return ele.id == item.id
-                        }) ? true : false
+                        }) ? true : false) : false
                     }
                     labelPosition="left"
                     label= {'#' + item.hashtag}
