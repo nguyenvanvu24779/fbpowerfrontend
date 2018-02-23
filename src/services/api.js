@@ -23,12 +23,17 @@ const API_ROOT = 'http://45.117.169.77:1337/'
 // This makes every API response have the same shape, regardless of how nested it was.
 function callApi(endpoint, schema, options) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
-
+  if(options == undefined){
+    options = {  credentials: 'include'}
+  } else{
+    options.credentials = 'include';
+  }
   return fetch(fullUrl, options)
     .then(response =>
       response.json().then(json => ({ json, response }))
     ).then(({ json, response }) => {
       if (!response.ok) {
+        console.log(response)
         return Promise.reject(json)
       }
       return json;
@@ -43,7 +48,7 @@ function callApi(endpoint, schema, options) {
     })
     .then(
       response => ({response}),
-      error => ({error: error.message || 'Something bad happened'})
+      error => ({error: 'Something bad happened'})
     )
 
 }
@@ -71,6 +76,11 @@ export const fetchAddGroup = (typeAdd, ids) => {
 export const callAddHashtag = (data) => {
   return callApi(`hashtag/create?hashtag=${data.hashtag}`, {})
 } 
+
+export const callLogin = (data) => {
+  return callApi('auth/local', {}, {method : 'POST', body :JSON.stringify({ identifier : data.identifier, password : data.password }) })
+} 
+
 
 
 export const fetchGetSettings = () =>{

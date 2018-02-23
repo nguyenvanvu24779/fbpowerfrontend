@@ -10,10 +10,11 @@ import Help from 'material-ui/svg-icons/action/help';
 import TextField from 'material-ui/TextField';
 import {Link} from 'react-router';
 import ThemeDefault from '../theme-default';
+import { connect } from 'react-redux'
+import {callLogin} from '../actions'
+import {browserHistory} from "react-router";
 
-const LoginPage = () => {
-
-  const styles = {
+const styles = {
     loginContainer: {
       minWidth: 320,
       maxWidth: 400,
@@ -70,75 +71,114 @@ const LoginPage = () => {
     btnSpan: {
       marginLeft: 5
     },
+};
+  
+class  LoginPage extends React.Component {
+  
+  constructor(props) {
+      super(props);
+      this.state = {
+         user : {},
+         email : '',
+         password : '',
+         errorMessage : ''
+      };
   };
-
-  return (
-    <MuiThemeProvider muiTheme={ThemeDefault}>
-      <div>
-        <div style={styles.loginContainer}>
-
-          <Paper style={styles.paper}>
-
-            <form>
-              <TextField
-                hintText="E-mail"
-                floatingLabelText="E-mail"
-                fullWidth={true}
-              />
-              <TextField
-                hintText="Password"
-                floatingLabelText="Password"
-                fullWidth={true}
-                type="password"
-              />
-
-              <div>
-                <Checkbox
-                  label="Remember me"
-                  style={styles.checkRemember.style}
-                  labelStyle={styles.checkRemember.labelStyle}
-                  iconStyle={styles.checkRemember.iconStyle}
+  
+  handleChangeEmail  = (event) => {
+    this.setState({email : event.target.value})
+  }
+  
+  handleChangePassword  = (event) => {
+    this.setState({password : event.target.value})
+  }
+  handleLogin = () => {
+    this.props.callLogin({identifier : this.state.email,  password : this.state.password});
+  }
+  componentWillReceiveProps(){
+    const {user,LOGIN_FAILURE} = this.props;
+    if(user && user.id)
+    {
+      //this.setState({errorMessage : ''});
+      return browserHistory.push('/');
+    }
+    if(LOGIN_FAILURE){
+      return this.setState({errorMessage : 'login fail!'});
+    }
+  }
+    
+  render(){
+   
+   
+    return (
+      <MuiThemeProvider muiTheme={ThemeDefault}>
+        <div>
+          <div style={styles.loginContainer}>
+  
+            <Paper style={styles.paper}>
+  
+              <form>
+                <TextField
+                  hintText="E-mail"
+                  floatingLabelText="E-mail"
+                  fullWidth={true}
+                  onChange={this.handleChangeEmail}
                 />
-
-                <Link to="/">
+                <TextField
+                  hintText="Password"
+                  floatingLabelText="Password"
+                  fullWidth={true}
+                  type="password"
+                  onChange={this.handleChangePassword}
+                />
+  
+                <div>
+                  {this.state.errorMessage}
+                  
                   <RaisedButton label="Login"
-                                primary={true}
-                                style={styles.loginBtn}/>
-                </Link>
-              </div>
-            </form>
-          </Paper>
-
-          <div style={styles.buttonsDiv}>
-            <FlatButton
-              label="Register"
-              href="/"
-              style={styles.flatButton}
-              icon={<PersonAdd />}
-            />
-
-            <FlatButton
-              label="Forgot Password?"
-              href="/"
-              style={styles.flatButton}
-              icon={<Help />}
-            />
-          </div>
-
-          <div style={styles.buttonsDiv}>
-            <Link to="/" style={{...styles.btn, ...styles.btnFacebook}}>
-              <i className="fa fa-facebook fa-lg"/>
-              <span style={styles.btnSpan}>Log in with Facebook</span>
-            </Link>
-            <Link to="/" style={{...styles.btn, ...styles.btnGoogle}}>
-              <i className="fa fa-google-plus fa-lg"/>
-              <span style={styles.btnSpan}>Log in with Google</span>
-            </Link>
+                    onClick={this.handleLogin}
+                    primary={true}
+                    style={styles.loginBtn}/>
+                  
+                </div>
+              </form>
+            </Paper>
+  
+            <div style={styles.buttonsDiv}>
+              <FlatButton
+                label="Register"
+                href="/"
+                style={styles.flatButton}
+                icon={<PersonAdd />}
+              />
+  
+              <FlatButton
+                label="Forgot Password?"
+                href="/"
+                style={styles.flatButton}
+                icon={<Help />}
+              />
+            </div>
+  
+            <div style={styles.buttonsDiv}>
+              <Link to="/" style={{...styles.btn, ...styles.btnFacebook}}>
+                <i className="fa fa-facebook fa-lg"/>
+                <span style={styles.btnSpan}>Log in with Facebook</span>
+              </Link>
+              <Link to="/" style={{...styles.btn, ...styles.btnGoogle}}>
+                <i className="fa fa-google-plus fa-lg"/>
+                <span style={styles.btnSpan}>Log in with Google</span>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </MuiThemeProvider>
-  );
+      </MuiThemeProvider>
+    );
+  }
 };
 
-export default LoginPage;
+
+export default connect(
+  state => ({user : state.entities.user, LOGIN_FAILURE : state.entities.LOGIN_FAILURE}),
+  {  callLogin  }
+)(LoginPage)

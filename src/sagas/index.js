@@ -5,7 +5,8 @@ import { api } from '../services'
 const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb ,openodes, addOpenode, deleteAccountsFB, addAccountsFB, schedulejob, refreshschedulejob, addContentShare, contentShare, updateContentShare, deleteContentShare, createStreamVideo, streamvideo,
     addHashtag,
     hashtag,
-    grouphashtag
+    grouphashtag,
+    login
 } = actions
 
 /***************************** Subroutines ************************************/
@@ -50,6 +51,8 @@ export const callAddHashtag = fetchEntity.bind(null,  addHashtag ,api.callAddHas
 export const fetchGetHashtags = fetchEntity.bind(null,  hashtag ,api.fetchGetHashtags);
 export const callAddGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.addGroupHashtag);
 export const callRemoveGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.removeGroupHashtag);
+export const callLogin = fetchEntity.bind(null,  login ,api.callLogin);
+
 
 
 
@@ -298,6 +301,14 @@ function* watchUpdateContentShare() {
   }
 }
 
+function* watchLogin() {
+  console.log('[sagas] watchLogin');
+  while(true){
+    const {data} = yield take(actions.CALL_LOGIN)
+    yield fork(callLogin, data)
+  }
+}
+
 
 
 
@@ -329,6 +340,7 @@ export default function* root() {
     fork(watchAddHashtag),
     fork(watchGetHashtag),
     fork(watchAddGroupHashtag),
-    fork(watchRemoveGroupHashtag)
+    fork(watchRemoveGroupHashtag),
+    fork(watchLogin)
   ])
 }

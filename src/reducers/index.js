@@ -46,6 +46,14 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       if(state) state.hashtags = [];
       return merge({}, state, {hashtags : action.response.data })
   }
+  if(action.type == "LOGIN_SUCCESS" &&  action.response ){
+      if(state) state.user = {};
+      return merge({}, state, {user : action.response })
+  }
+  if(action.type == "LOGIN_FAILURE"){
+      if(state) state.LOGIN_FAILURE = null;
+      return merge({}, state, {LOGIN_FAILURE : true })
+  }
   return state
 }
 
