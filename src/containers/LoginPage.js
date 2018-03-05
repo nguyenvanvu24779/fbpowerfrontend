@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
-import {grey500, white} from 'material-ui/styles/colors';
+import {grey500, white,red500} from 'material-ui/styles/colors';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import Help from 'material-ui/svg-icons/action/help';
 import TextField from 'material-ui/TextField';
@@ -13,6 +13,8 @@ import ThemeDefault from '../theme-default';
 import { connect } from 'react-redux'
 import {callLogin} from '../actions'
 import {browserHistory} from "react-router";
+import Subheader from 'material-ui/Subheader';
+
 
 const styles = {
     loginContainer: {
@@ -99,16 +101,16 @@ class  LoginPage extends React.Component {
     const {user,LOGIN_FAILURE} = this.props;
     if(user && user.id)
     {
-      //this.setState({errorMessage : ''});
       return browserHistory.push('/');
-    }
-    if(LOGIN_FAILURE){
-      return this.setState({errorMessage : 'login fail!'});
     }
   }
     
   render(){
-   
+    const {user, LOGIN_FAILURE} = this.props;
+    if(user && user.id)
+    {
+      return browserHistory.push('/');
+    }
    
     return (
       <MuiThemeProvider muiTheme={ThemeDefault}>
@@ -133,7 +135,8 @@ class  LoginPage extends React.Component {
                 />
   
                 <div>
-                  {this.state.errorMessage}
+                  <Subheader style={{color : red500}}>{LOGIN_FAILURE ? 'Login fail!' : ''}</Subheader>
+                  
                   
                   <RaisedButton label="Login"
                     onClick={this.handleLogin}

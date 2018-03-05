@@ -26,6 +26,10 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
       if(state) state.groups = {};
       return merge({}, state, {groups : action.response.data , meta : action.response.meta})
   }
+  if(action.type == "USERS_SUCCESS" &&  action.response ){
+      if(state) state.users = {};
+      return merge({}, state, {users : action.response.data , meta : action.response.meta})
+  }
    if(action.type == "OPENODES_SUCCESS" &&  action.response ){
       if(state) state.openodes = {};
       return merge({}, state, {openodes : action.response.data , meta : action.response.meta})

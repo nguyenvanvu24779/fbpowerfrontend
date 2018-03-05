@@ -10,6 +10,7 @@ import StreamVideoFormPage from './containers/StreamVideoFormPage';
 import GroupManagementPage from './containers/GroupManagementPage';
 import SettingMngtPage from './containers/SettingMngtPage';
 import AccountFaceBookPage  from './containers/AccountFaceBookPage';
+import UserManagementPage  from './containers/UserManagementPage';
 import ScheduleJobPage  from './containers/ScheduleJobPage';
 import ContentShareManagementPage  from './containers/ContentShareManagementPage';
 import OpenodeManagementPage from './containers/OpenodeManagementPage'
@@ -27,6 +28,7 @@ export default (
       <Route path="streamVideoForm" component={StreamVideoFormPage}/>
       <Route path="groupMngt" component={GroupManagementPage}/>
       <Route path="accountFbMngt" component={AccountFaceBookPage}/>
+      <Route path="userMngt" component={UserManagementPage}/>
       <Route path="settingMngt" component={SettingMngtPage}/>
       <Route path="scheduleJob" component={ScheduleJobPage}/>
       <Route path="contentShareMngt" component={ContentShareManagementPage}/>

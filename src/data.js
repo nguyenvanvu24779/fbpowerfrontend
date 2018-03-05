@@ -22,6 +22,7 @@ const data = {
     { text: 'Stream Video', icon: <VideoLibrary/>, link: '/stream' },
     { text: 'Content Share Mngt', icon: <Web/>, link: '/contentShareMngt' },
     { text: 'Account FB Mngt', icon: <AccountBox/>, link: '/accountFbMngt' },
+    { text: 'User Mngt', icon: <AccountBox/>, link: '/userMngt' },
     { text: 'Group Mngt', icon: <GroupWork/>, link: '/groupMngt' },
     { text: 'Setting Mngt', icon: <SettingBrightness/>, link: '/settingMngt' },
     { text: 'Schedule Job', icon: <Schedule/>, link: '/scheduleJob' },

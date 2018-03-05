@@ -12,6 +12,7 @@ function createRequestTypes(base) {
 
 export const STREAMVIDEO = createRequestTypes('STREAMVIDEO')
 export const LOGIN = createRequestTypes('LOGIN')
+export const USERS = createRequestTypes('USERS')
 export const ADDHASHTAG = createRequestTypes('ADDHASHTAG')
 export const HASHTAG = createRequestTypes('HASHTAG')
 export const GROUPHASHTAG = createRequestTypes('GROUPHASHTAG')
@@ -40,6 +41,7 @@ export const ADDOPENODE = createRequestTypes('ADDOPENODE')
 
 export const ADD_GROUPS = 'ADD_GROUPS'
 export const CALL_LOGIN = 'CALL_LOGIN'
+export const LOAD_USERS = 'LOAD_USERS'
 export const ADD_HASHTAG = 'ADD_HASHTAG'
 export const REMOVE_GROUPHASHTAG = 'REMOVE_GROUPHASHTAG'
 export const ADD_GROUPHASHTAG = 'ADD_GROUPHASHTAG'
@@ -83,6 +85,12 @@ export const settings = {
   request: () => action(SETTINGS[REQUEST]),
   success: (response) => action(SETTINGS[SUCCESS], { response}),
   failure: (error) => action(SETTINGS[FAILURE], {error}),
+}
+
+export const users = {
+  request: () => action(USERS[REQUEST]),
+  success: (response) => action(USERS[SUCCESS], { response}),
+  failure: (error) => action(USERS[FAILURE], {error}),
 }
 
 export const login = {
@@ -250,6 +258,7 @@ export const stargazers = {
 
 export const addGroup = data => action(ADD_GROUPS,{data} )
 export const callLogin = data => action(CALL_LOGIN,{data} )
+export const loadUsers = data => action(LOAD_USERS,{data} )
 export const callAddHashtag = data => action(ADD_HASHTAG,{data} )
 export const callAddOpenode = data => action(ADD_OPENODE,{data} )
 export const callCreateStreamVideo = data => action(CREATE_STREAMVIDEO,{data} )
