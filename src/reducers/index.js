@@ -3,6 +3,15 @@ import merge from 'lodash/object/merge'
 import paginate from './paginate'
 import { combineReducers } from 'redux'
 
+var socketIOClient = require('socket.io-client');
+var sailsIOClient = require('sails.io.js');
+
+
+// Instantiate the socket client (`io`)
+// (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
+//var io = sailsIOClient(socketIOClient);
+//io.sails.url = 'http://159.65.131.200:1337/';
+
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = { users: {}, repos: {}, settings : {}}, action) {
   //if (action.response && action.response.entities) {
@@ -57,6 +66,10 @@ function entities(state = { users: {}, repos: {}, settings : {}}, action) {
   if(action.type == "LOGIN_FAILURE"){
       if(state) state.LOGIN_FAILURE = null;
       return merge({}, state, {LOGIN_FAILURE : true })
+  }
+   if(action.type.includes("FAILURE") && action.error == 403 ){
+      if(state) state.LOGIN = null;
+      return merge({}, state, {LOGIN : true })
   }
   return state
 }

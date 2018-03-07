@@ -13,6 +13,21 @@ import configureStore from './store/configureStore'
 import rootSaga from './sagas'
 import { Provider } from 'react-redux'
 
+var socketIOClient = require('socket.io-client');
+var sailsIOClient = require('sails.io.js');
+
+
+// Instantiate the socket client (`io`)
+// (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
+var io = sailsIOClient(socketIOClient);
+
+// Set some options:
+// (you have to specify the host and port of the Sails backend when using this library from Node.js)
+io.sails.url = 'http://159.65.131.200:1337/';
+
+window.io = io;
+
+
 const store = configureStore(window.__INITIAL_STATE__)
 store.runSaga(rootSaga);
 

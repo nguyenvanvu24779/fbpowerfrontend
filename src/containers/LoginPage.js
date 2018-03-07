@@ -98,17 +98,31 @@ class  LoginPage extends React.Component {
     this.props.callLogin({identifier : this.state.email,  password : this.state.password});
   }
   componentWillReceiveProps(){
-    const {user,LOGIN_FAILURE} = this.props;
-    if(user && user.id)
-    {
-      return browserHistory.push('/');
-    }
+    
   }
     
   render(){
     const {user, LOGIN_FAILURE} = this.props;
     if(user && user.id)
     {
+        // Send a GET request to `http://localhost:1337/hello`:
+      window.io.socket.get('/root/join', function serverResponded (body, JWR) {
+        // body === JWR.body
+        console.log('Sails responded with: ', body);
+        console.log('with headers: ', JWR.headers);
+        console.log('and with status code: ', JWR.statusCode);
+      
+        // ...
+        // more stuff
+        // ...
+      
+      
+        // When you are finished with `io.socket`, or any other sockets you connect manually,
+        // you should make sure and disconnect them, e.g.:
+       // io.socket.disconnect();
+      
+        // (note that there is no callback argument to the `.disconnect` method)
+      });
       return browserHistory.push('/');
     }
    
@@ -182,6 +196,6 @@ class  LoginPage extends React.Component {
 
 
 export default connect(
-  state => ({user : state.entities.user, LOGIN_FAILURE : state.entities.LOGIN_FAILURE}),
+  state => ({user : state.entities.user, LOGIN_FAILURE : state.entities.LOGIN_FAILURE, io : state.entities.io}),
   {  callLogin  }
 )(LoginPage)

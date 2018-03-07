@@ -17,7 +17,7 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1)
 }
 
-const API_ROOT = 'http://45.117.169.77:1337/'
+const API_ROOT = 'http://159.65.131.200:1337/'
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -29,9 +29,17 @@ function callApi(endpoint, schema, options) {
     options.credentials = 'include';
   }
   return fetch(fullUrl, options)
-    .then(response =>
-      response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
+    .then(response => {
+      console.log(response);
+      if(!response.ok)
+        return Promise.reject(response.status);
+      return  response.json().then(json => ({ json, response }))
+    }).then(({ json, response }) => {
+      console.log(response)
+      if (response.status == 403) {
+        return Promise.resolve(response.status)
+      }
+      
       if (!response.ok) {
         console.log(response)
         return Promise.reject(json)
@@ -48,7 +56,14 @@ function callApi(endpoint, schema, options) {
     })
     .then(
       response => ({response}),
-      error => ({error: 'Something bad happened'})
+      error => {
+        console.log(error);
+        if(error == 403){
+          return {error: 403}
+        }
+        return {error: 'Something bad happened'}
+        
+      }
     )
 
 }

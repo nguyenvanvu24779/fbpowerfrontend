@@ -29,6 +29,11 @@ const data = {
     { text: 'Node Mngt', icon: <Web/>, link: '/nodeMngt' },
    
   ],
+  menusUser: [
+    { text: 'DashBoard', icon: <Assessment/>, link: '/dashboard' },
+    { text: 'Login Page', icon: <PermIdentity/>, link: '/login' },
+    { text: 'Stream Video', icon: <VideoLibrary/>, link: '/stream' },
+  ],
   tablePage: {
     items: [
       {id: 1, name: 'Product 1', price: '$50.00', category: 'Category 1'},

@@ -19,18 +19,8 @@ import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
 import Badge from 'material-ui/Badge';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
-
-var socketIOClient = require('socket.io-client');
-var sailsIOClient = require('sails.io.js');
-
-
-// Instantiate the socket client (`io`)
-// (for now, you must explicitly pass in the socket.io client when using this library from Node.js)
-var io = sailsIOClient(socketIOClient);
-
-// Set some options:
-// (you have to specify the host and port of the Sails backend when using this library from Node.js)
-io.sails.url = 'http://45.117.169.77:1337/';
+import { connect } from 'react-redux'
+import {browserHistory} from "react-router";
 
 
 import Data from '../data';
@@ -52,29 +42,13 @@ class App extends React.Component {
       numNewMsg : 0,
       dataSourceChat : [],
       alertMsg : '',
-      open : false
+      open : false, 
+      userType : 'User'
     };
     
-    // Send a GET request to `http://localhost:1337/hello`:
-    io.socket.get('/root/join', function serverResponded (body, JWR) {
-      // body === JWR.body
-      console.log('Sails responded with: ', body);
-      console.log('with headers: ', JWR.headers);
-      console.log('and with status code: ', JWR.statusCode);
     
-      // ...
-      // more stuff
-      // ...
-    
-    
-      // When you are finished with `io.socket`, or any other sockets you connect manually,
-      // you should make sure and disconnect them, e.g.:
-     // io.socket.disconnect();
-    
-      // (note that there is no callback argument to the `.disconnect` method)
-    });
-    io.socket.on('message', (function (broadcastedData){
-      
+    window.io.socket.on('message', (function (broadcastedData){
+      console.log(broadcastedData)
        if(broadcastedData.msg){
           console.log(broadcastedData.msg);
           var dataSourceChat = this.state.dataSourceChat;
@@ -90,6 +64,9 @@ class App extends React.Component {
        }
        if(broadcastedData.alert){
          this.setState({alertMsg : broadcastedData.alert, open : true })
+       }
+       if(broadcastedData.userType){
+         this.setState({userType : broadcastedData.userType })
        }
        // => 'hi there!'
     }).bind(this));
@@ -113,6 +90,11 @@ class App extends React.Component {
   handleClose  (){
     this.setState({open : false})
   } 
+  
+  componentWillReceiveProps(){
+    if(!this.props.LOGIN)
+      return browserHistory.push('/login');
+  }
 
   render() {
     let { navDrawerOpen } = this.state;
@@ -161,8 +143,8 @@ class App extends React.Component {
                   handleChangeRequestNavDrawer={this.handleChangeRequestNavDrawer.bind(this)}/>
       
             <LeftDrawer navDrawerOpen={navDrawerOpen}
-                        menus={Data.menus}
-                        username="User Admin"/>
+                        menus={this.state.userType == 'User' ? Data.menusUser : Data.menus}
+                        username={this.state.userType == 'User' ? "User" : 'User admin'}/>
             <Dialog
                 title="System Message"
                 actions={actions}
@@ -207,4 +189,10 @@ App.propTypes = {
   width: PropTypes.number
 };
 
-export default withWidth()(App);
+export default connect(
+  state => ({LOGIN : state.entities.LOGIN }),
+  {  }
+)(withWidth()(App))
+
+
+
