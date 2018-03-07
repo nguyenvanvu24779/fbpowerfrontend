@@ -8,6 +8,7 @@ const {settings , updateSettings, groups, deleteGroups,updateGroups, accountsfb 
     grouphashtag,
     login,
     users,
+    adduser
 } = actions
 
 /***************************** Subroutines ************************************/
@@ -54,6 +55,8 @@ export const callAddGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.add
 export const callRemoveGroupHashtag = fetchEntity.bind(null,  grouphashtag ,api.removeGroupHashtag);
 export const callLogin = fetchEntity.bind(null,  login ,api.callLogin);
 export const fetchGetUsers = fetchEntity.bind(null,  users ,api.fetchGetUsers);
+export const callAddUser = fetchEntity.bind(null,  adduser ,api.callAddUser);
+
 
 
 
@@ -312,6 +315,15 @@ function* watchLoadUsers() {
   }
 }
 
+
+function* watchAddUser() {
+  console.log('[sagas] watchAddUser');
+  while(true){
+    const {data} = yield take(actions.ADD_USER)
+    yield fork(callAddUser, data)
+  }
+}
+
 function* watchLogin() {
   console.log('[sagas] watchLogin');
   while(true){
@@ -352,6 +364,8 @@ export default function* root() {
     fork(watchGetHashtag),
     fork(watchAddGroupHashtag),
     fork(watchRemoveGroupHashtag),
-    fork(watchLogin)
+    fork(watchLogin),
+    fork(watchLoadUsers),
+    fork(watchAddUser)
   ])
 }

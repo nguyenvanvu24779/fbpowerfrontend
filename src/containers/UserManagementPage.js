@@ -18,7 +18,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { connect } from 'react-redux'
-import {loadAccountsFB, callDeleteAccountsFB, callAddAccountsFB, callRefreshAccountsFB} from '../actions'
+import {loadUsers, addUser} from '../actions'
 
 const DeleteIcon = (props) => (
     <SvgIcon {...props}>
@@ -125,7 +125,7 @@ class  UserManagementPage extends React.Component {
       this.state = {
           checked: false,
           valueCredit : 100,
-          openAddAccount : false,
+          openAddUser : false,
           loadding : false,
           page : 1,
           per_page : 100 ,
@@ -134,11 +134,14 @@ class  UserManagementPage extends React.Component {
           openAccountDetail : false,
           account : {},
           openComfirm : false,
-          idDelete : ''
+          idDelete : '',
+          email : '',
+          password : '',
+          group : 'User'
       };
     };
     componentDidMount(){
-      //this.props.loadAccountsFB({page : 1, per_page : 100});
+    this.props.loadUsers({page : 1, per_page : 100});
     
     };
     componentWillReceiveProps(newProps) {
@@ -156,10 +159,10 @@ class  UserManagementPage extends React.Component {
     handleChangeCredit = (event, index, valueCredit) => this.setState({valueCredit});
     
     handleOpenAddAccount = () =>{
-    //  this.setState({openAddAccount : true})
+      this.setState({openAddUser : true})
     };
-    handleCloseAddAccount = () => {
-      this.setState({openAddAccount : false})
+    handleCloseAddUser = () => {
+      this.setState({openAddUser : false})
     };
     handleDeleteAccountsFB = (id) =>  {
         this.setState({openComfirm : true, idDelete : id})
@@ -189,59 +192,76 @@ class  UserManagementPage extends React.Component {
       this.props.callAddAccountsFB({account : account});
       this.setState({openAddAccount : false})
     };
-    handleChangeTextAccount = (event) => {
-      this.setState({accountText : event.target.value, hashtag : this.state.hashtag ? this.state.hashtag  : '#default'})
-      
+
+    handleOnChangeEmail = (event) => {
+      this.setState({email : event.target.value})
     }
-    handleOnChangeHashTag = (event) => {
-      this.setState({hashtag : event.target.value})
+    handleOnChangePassword = (event) => {
+      this.setState({password : event.target.value})
     }
-    handleCloseAccountDetail = () => {
-      this.setState({openAccountDetail : false})
+    handleChangeGroup = (event, index, value) =>{
+      this.setState({group : value})
     }
-    handleOpenAccountDetail = (item) => {
-      this.setState({openAccountDetail : true});
-      this.setState({account : item})
+    handleAddUser = () => {
+      this.props.addUser({email : this.state.email,password:  this.state.password});
     }
-    
-    handleRefreshAccount = (item) => {
-      this.props.callRefreshAccountsFB({id : item.id, account : item.username + '|' + item.password})
-      
-    }
-    
-    handleCloseComfirm = () => {
-      this.setState({openComfirm : false})
-    }
+   
     
     
     render(){
-      const {accountsfb, meta} = this.props;
-      const actions = [
-            <FlatButton
-              label="Ok"
-              primary={true}
-              keyboardFocused={true}
-              onClick={this.handleCallAddAccountsFB.bind(this)}
-            />
-      ];
-       const actionsComfirm = [
+      const {users, meta} = this.props;
+  
+       const actions= [
             <FlatButton
               label="Cancel"
               primary={true}
               keyboardFocused={true}
-              onClick={this.handleCloseComfirm.bind(this)}
+              onClick={this.handleCloseAddUser.bind(this)}
             />,
             <FlatButton
               label="Ok"
               primary={true}
               keyboardFocused={true}
-               onClick={this.handleCallDeleteAccountsFB.bind(this)}
+            onClick={this.handleAddUser.bind(this)}
             />
       ];
       return (
             <PageBase title="User Mngt Page"
                       navigation="Application / User Mngt Page">
               <div>
+               <Dialog
+                title="Add Account"
+                actions={actions}
+                modal={false}
+                open={this.state.openAddUser}
+                onRequestClose={this.handleCloseAddUser}
+               >  
+                <TextField
+                      style ={{marginTop : 10}}
+                      hintText={"Email"}
+                      fullWidth={true}
+                      floatingLabelText={"Email"}
+                      onChange = {this.handleOnChangeEmail}
+                />
+                
+                <TextField
+                      style ={{marginTop : 10}}
+                      hintText={"Password"}
+                      fullWidth={true}
+                      floatingLabelText={"Password"}
+                      type="password"
+                      onChange = {this.handleOnChangePassword}
+                />
+                 <SelectField
+                  floatingLabelText="Group"
+                  value={this.state.group}
+                  fullWidth={true}
+                  style ={{marginLeft : 10}}
+                  onChange={this.handleChangeGroup}>
+                      <MenuItem value={'Administrator'} primaryText={"Administrator"}/>
+                      <MenuItem value={'User'} primaryText={"User"}/>
+                </SelectField>
+              </Dialog>
               <RaisedButton label="Load" style={styles.btnLoad} primary={true} onClick = {this.handleLoadAccountsFB} disabled = {this.state.loadding}/>
                 <TextField
                       style ={styles.input}
@@ -265,16 +285,14 @@ class  UserManagementPage extends React.Component {
                   <TableRow>
                     <TableHeaderColumn style={styles.columns.id}>ID</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.username}>UserName</TableHeaderColumn>
-                    <TableHeaderColumn style={styles.columns.groups}>Groups</TableHeaderColumn>
                     <TableHeaderColumn style={styles.columns.actions}>Actions</TableHeaderColumn>
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
-                  {accountsfb && accountsfb.length > 0 ?  accountsfb.map(item =>
+                  {users && users.length > 0 ?  users.map(item =>
                     <TableRow key={item.id}>
                       <TableRowColumn style={styles.columns.id}>{item.id}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.username}>{item.username}</TableRowColumn>
-                      <TableRowColumn style={styles.columns.groups}>{item.groups ?  item.groups.length : 'none'}</TableRowColumn>
+                      <TableRowColumn style={styles.columns.username}>{item.email}</TableRowColumn>
                       <TableRowColumn style={styles.columns.actions}>
                           <IconButton >
                             <DetailIcon  color={greenA200} />
@@ -294,8 +312,12 @@ class  UserManagementPage extends React.Component {
  
 };
 
+UserManagementPage.propTypes = {
+  
+}
+
 
 export default connect(
-  state => ({accountsfb : state.entities.accountsfb, meta : state.entities.meta}),
-  {  loadAccountsFB , callDeleteAccountsFB, callAddAccountsFB, callRefreshAccountsFB}
+  state => ({users : state.entities.users, meta : state.entities.meta}),
+  {  loadUsers, addUser}
 )(UserManagementPage)

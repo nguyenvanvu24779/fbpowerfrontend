@@ -89,8 +89,13 @@ export const fetchGetSettings = () =>{
 } 
 export const fetchGetUsers = (data) =>{
   console.log('[api] fetchGetUsers')
-  return callApi(`user/list?page=${data.page}&per_page=${data.per_page}&sortBy=${data.sortBy}` , {})
+  return callApi(`users/list?page=${data.page}&per_page=${data.per_page}&sortBy=${data.sortBy}` , {})
 } 
+
+export const callAddUser = (data) => {
+  return callApi('users/register', {}, {method : 'POST', body :JSON.stringify({ email : data.email, password : data.password }) })
+} 
+
 
 export const fetchGetHashtags = () =>{
   console.log('[api] fetchGetHashtags')
